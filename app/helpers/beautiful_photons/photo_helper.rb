@@ -20,5 +20,11 @@ module BeautifulPhotons
 
       image_tag(url_for(photo.image), **options.merge(style: style))
     end
+
+    def beautiful_photons_gallery(gallery_name)
+      gallery = Gallery.find_by!(name: gallery_name)
+      photos = gallery.gallery_photos.order(:position).map(&:photo)
+      photos.each { |photo| yield photo }
+    end
   end
 end

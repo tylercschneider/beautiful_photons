@@ -36,5 +36,30 @@ module BeautifulPhotons
       assert_includes html, 'data-mobile-focal-x="40.0"'
       assert_includes html, 'data-mobile-focal-y="20.0"'
     end
+
+    test "beautiful_photons_gallery yields photos in position order" do
+      gallery = Gallery.create!(name: "test_gallery", title: "Test")
+      photo2 = create_photo("Second")
+      GalleryPhoto.create!(gallery: gallery, photo: photo2, position: 1)
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 2)
+
+      titles = []
+      beautiful_photons_gallery("test_gallery") { |photo| titles << photo.title }
+
+      assert_equal %w[Second Test], titles
+    end
+
+    private
+
+    def create_photo(title)
+      photo = Photo.new(title: title)
+      photo.image.attach(
+        io: File.open(file_fixture("test_image.jpg")),
+        filename: "test_image.jpg",
+        content_type: "image/jpeg"
+      )
+      photo.save!
+      photo
+    end
   end
 end
