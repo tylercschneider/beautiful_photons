@@ -12,5 +12,11 @@ module BeautifulPhotons
       assert_not gallery.valid?
       assert_includes gallery.errors[:name], "can't be blank"
     end
+
+    test "invalid without title" do
+      gallery = Gallery.new(name: "homepage_hero")
+      assert_not gallery.valid?
+      assert_includes gallery.errors[:title], "can't be blank"
+    end
   end
 end
