@@ -21,5 +21,12 @@ module BeautifulPhotons
       assert_includes html, "object-fit: cover"
       assert_includes html, "<img"
     end
+
+    test "beautiful_photons_image accepts class and aspect options" do
+      html = beautiful_photons_image(@photo, class: "hero-img", aspect: "4/3")
+
+      assert_includes html, 'class="hero-img"'
+      assert_includes html, "aspect-ratio: 4/3"
+    end
   end
 end
