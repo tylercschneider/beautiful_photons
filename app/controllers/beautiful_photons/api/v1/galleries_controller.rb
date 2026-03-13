@@ -9,7 +9,21 @@ module BeautifulPhotons
           render json: galleries.map { |gallery| gallery_json(gallery) }
         end
 
+        def create
+          gallery = Gallery.new(gallery_params)
+
+          if gallery.save
+            render json: gallery_json(gallery), status: :created
+          else
+            render json: { errors: gallery.errors.full_messages }, status: :unprocessable_entity
+          end
+        end
+
         private
+
+        def gallery_params
+          params.require(:gallery).permit(:name, :title, :description)
+        end
 
         def gallery_json(gallery)
           {
