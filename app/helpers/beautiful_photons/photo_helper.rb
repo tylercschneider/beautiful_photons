@@ -11,6 +11,13 @@ module BeautifulPhotons
         style = "#{style}; #{options.delete(:style)}"
       end
 
+      if photo.mobile_focal_x.present?
+        options[:data] = (options[:data] || {}).merge(
+          mobile_focal_x: photo.effective_mobile_focal_x.to_f,
+          mobile_focal_y: photo.effective_mobile_focal_y.to_f
+        )
+      end
+
       image_tag(url_for(photo.image), **options.merge(style: style))
     end
   end

@@ -28,5 +28,13 @@ module BeautifulPhotons
       assert_includes html, 'class="hero-img"'
       assert_includes html, "aspect-ratio: 4/3"
     end
+
+    test "beautiful_photons_image includes mobile focal point data attributes" do
+      @photo.update!(mobile_focal_x: 40, mobile_focal_y: 20)
+      html = beautiful_photons_image(@photo)
+
+      assert_includes html, 'data-mobile-focal-x="40.0"'
+      assert_includes html, 'data-mobile-focal-y="20.0"'
+    end
   end
 end
