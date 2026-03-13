@@ -3,7 +3,7 @@ BeautifulPhotons::Engine.routes.draw do
     namespace :v1 do
       resources :photos
       resources :galleries do
-        resources :photos, controller: "gallery_photos", only: [ :create ], as: :photos
+        resources :photos, controller: "gallery_photos", only: [ :create, :update, :destroy ], as: :photos
       end
     end
   end

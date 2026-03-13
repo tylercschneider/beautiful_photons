@@ -27,6 +27,20 @@ module BeautifulPhotons
           assert_equal "backsplashes", json["category"]
         end
 
+        test "PATCH /api/v1/galleries/:id/photos/:id updates position and category" do
+          gp = GalleryPhoto.create!(gallery: @gallery, photo: @photo, position: 1, category: "floors")
+
+          patch api_v1_gallery_photo_url(@gallery, gp), params: {
+            gallery_photo: { position: 3, category: "bathrooms" }
+          }
+
+          assert_response :ok
+
+          json = JSON.parse(response.body)
+          assert_equal 3, json["position"]
+          assert_equal "bathrooms", json["category"]
+        end
+
         private
 
         def create_photo(title: "Test Photo")

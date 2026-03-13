@@ -15,6 +15,17 @@ module BeautifulPhotons
           end
         end
 
+        def update
+          gallery = Gallery.find(params[:gallery_id])
+          gallery_photo = gallery.gallery_photos.find(params[:id])
+
+          if gallery_photo.update(gallery_photo_params.except(:photo_id))
+            render json: gallery_photo_json(gallery_photo)
+          else
+            render json: { errors: gallery_photo.errors.full_messages }, status: :unprocessable_entity
+          end
+        end
+
         private
 
         def gallery_photo_params
