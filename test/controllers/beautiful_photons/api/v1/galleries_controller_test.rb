@@ -51,6 +51,16 @@ module BeautifulPhotons
           assert_equal "Updated", json["description"]
         end
 
+        test "DELETE /api/v1/galleries/:id destroys a gallery" do
+          gallery = Gallery.create!(name: "to_delete", title: "Delete Me")
+
+          assert_difference("BeautifulPhotons::Gallery.count", -1) do
+            delete api_v1_gallery_url(gallery)
+          end
+
+          assert_response :no_content
+        end
+
         test "POST /api/v1/galleries returns 422 without name" do
           post api_v1_galleries_url, params: { gallery: { title: "No Name" } }
 

@@ -14,6 +14,12 @@ module BeautifulPhotons
           render json: gallery_json(gallery)
         end
 
+        def destroy
+          gallery = Gallery.find(params[:id])
+          gallery.destroy!
+          head :no_content
+        end
+
         def update
           gallery = Gallery.find(params[:id])
 
