@@ -14,6 +14,18 @@ module BeautifulPhotons
           )
         end
 
+        test "GET /api/v1/photos/:id returns a single photo" do
+          photo = create_photo(title: "Mountain")
+
+          get api_v1_photo_url(photo)
+
+          assert_response :ok
+
+          json = JSON.parse(response.body)
+          assert_equal "Mountain", json["title"]
+          assert_equal photo.id, json["id"]
+        end
+
         test "POST /api/v1/photos creates a photo" do
           assert_difference("BeautifulPhotons::Photo.count", 1) do
             post api_v1_photos_url, params: { photo: { title: "Sunset", image: @image } }
