@@ -3,6 +3,12 @@ module BeautifulPhotons
     module V1
       class PhotosController < ApplicationController
         skip_forgery_protection
+
+        def index
+          photos = Photo.all
+          render json: photos.map { |photo| photo_json(photo) }
+        end
+
         def create
           photo = Photo.new(photo_params)
 
