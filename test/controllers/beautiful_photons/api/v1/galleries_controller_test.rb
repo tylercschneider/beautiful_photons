@@ -37,6 +37,20 @@ module BeautifulPhotons
           assert_equal gallery.id, json["id"]
         end
 
+        test "PATCH /api/v1/galleries/:id updates a gallery" do
+          gallery = Gallery.create!(name: "old_name", title: "Old Title")
+
+          patch api_v1_gallery_url(gallery), params: {
+            gallery: { title: "New Title", description: "Updated" }
+          }
+
+          assert_response :ok
+
+          json = JSON.parse(response.body)
+          assert_equal "New Title", json["title"]
+          assert_equal "Updated", json["description"]
+        end
+
         test "POST /api/v1/galleries returns 422 without name" do
           post api_v1_galleries_url, params: { gallery: { title: "No Name" } }
 

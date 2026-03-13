@@ -14,6 +14,16 @@ module BeautifulPhotons
           render json: gallery_json(gallery)
         end
 
+        def update
+          gallery = Gallery.find(params[:id])
+
+          if gallery.update(gallery_params)
+            render json: gallery_json(gallery)
+          else
+            render json: { errors: gallery.errors.full_messages }, status: :unprocessable_entity
+          end
+        end
+
         def create
           gallery = Gallery.new(gallery_params)
 
