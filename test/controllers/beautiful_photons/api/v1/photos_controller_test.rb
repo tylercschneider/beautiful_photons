@@ -79,6 +79,16 @@ module BeautifulPhotons
           assert json["errors"].any? { |e| e.include?("Focal x") }
         end
 
+        test "DELETE /api/v1/photos/:id destroys a photo" do
+          photo = create_photo
+
+          assert_difference("BeautifulPhotons::Photo.count", -1) do
+            delete api_v1_photo_url(photo)
+          end
+
+          assert_response :no_content
+        end
+
         test "POST /api/v1/photos returns 422 without image" do
           post api_v1_photos_url, params: { photo: { title: "No Image" } }
 

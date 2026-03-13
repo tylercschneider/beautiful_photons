@@ -24,6 +24,12 @@ module BeautifulPhotons
           end
         end
 
+        def destroy
+          photo = Photo.find(params[:id])
+          photo.destroy!
+          head :no_content
+        end
+
         def create
           photo = Photo.new(photo_params)
 
