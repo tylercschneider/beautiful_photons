@@ -48,6 +48,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_13_003807) do
     t.index [ "name" ], name: "index_beautiful_photons_galleries_on_name", unique: true
   end
 
+  create_table "beautiful_photons_gallery_photos", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.bigint "gallery_id", null: false
+    t.bigint "photo_id", null: false
+    t.integer "position", null: false
+    t.datetime "updated_at", null: false
+    t.index [ "gallery_id", "photo_id", "category" ], name: "idx_bp_gallery_photos_uniqueness", unique: true
+    t.index [ "gallery_id" ], name: "index_beautiful_photons_gallery_photos_on_gallery_id"
+    t.index [ "photo_id" ], name: "index_beautiful_photons_gallery_photos_on_photo_id"
+  end
+
   create_table "beautiful_photons_photos", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
