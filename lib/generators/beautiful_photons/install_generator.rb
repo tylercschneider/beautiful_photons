@@ -12,8 +12,9 @@ module BeautifulPhotons
 
       desc "Install BeautifulPhotons photo gallery engine"
 
-      def copy_migration
+      def copy_migrations
         migration_template "create_beautiful_photons_photos.rb.tt", "db/migrate/create_beautiful_photons_photos.rb"
+        migration_template "create_beautiful_photons_galleries.rb.tt", "db/migrate/create_beautiful_photons_galleries.rb"
       end
 
       def mount_engine
