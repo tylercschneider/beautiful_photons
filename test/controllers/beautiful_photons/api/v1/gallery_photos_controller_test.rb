@@ -41,6 +41,21 @@ module BeautifulPhotons
           assert_equal "bathrooms", json["category"]
         end
 
+        test "GET /api/v1/galleries/:id/photos lists photos ordered by position" do
+          photo2 = create_photo(title: "Second")
+          GalleryPhoto.create!(gallery: @gallery, photo: photo2, position: 1)
+          GalleryPhoto.create!(gallery: @gallery, photo: @photo, position: 2)
+
+          get api_v1_gallery_photos_url(@gallery)
+
+          assert_response :ok
+
+          json = JSON.parse(response.body)
+          assert_equal 2, json.length
+          assert_equal 1, json.first["position"]
+          assert_equal 2, json.second["position"]
+        end
+
         test "DELETE /api/v1/galleries/:id/photos/:id removes photo from gallery" do
           gp = GalleryPhoto.create!(gallery: @gallery, photo: @photo, position: 1)
 

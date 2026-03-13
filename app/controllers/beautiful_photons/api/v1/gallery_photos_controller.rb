@@ -4,6 +4,12 @@ module BeautifulPhotons
       class GalleryPhotosController < ApplicationController
         skip_forgery_protection
 
+        def index
+          gallery = Gallery.find(params[:gallery_id])
+          gallery_photos = gallery.gallery_photos.order(:position)
+          render json: gallery_photos.map { |gp| gallery_photo_json(gp) }
+        end
+
         def create
           gallery = Gallery.find(params[:gallery_id])
           gallery_photo = gallery.gallery_photos.new(gallery_photo_params)
