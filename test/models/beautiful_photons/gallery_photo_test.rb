@@ -35,5 +35,10 @@ module BeautifulPhotons
       duplicate = GalleryPhoto.new(gallery: @gallery, photo: @photo, position: 2, category: "backsplashes")
       assert_not duplicate.valid?
     end
+
+    test "gallery has_many photos through gallery_photos" do
+      GalleryPhoto.create!(gallery: @gallery, photo: @photo, position: 1)
+      assert_includes @gallery.photos, @photo
+    end
   end
 end
