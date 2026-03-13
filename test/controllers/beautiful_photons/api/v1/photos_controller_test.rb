@@ -68,6 +68,17 @@ module BeautifulPhotons
           assert_equal true, json["published"]
         end
 
+        test "PATCH /api/v1/photos/:id returns 422 with invalid focal points" do
+          photo = create_photo
+
+          patch api_v1_photo_url(photo), params: { photo: { focal_x: 150 } }
+
+          assert_response :unprocessable_entity
+
+          json = JSON.parse(response.body)
+          assert json["errors"].any? { |e| e.include?("Focal x") }
+        end
+
         test "POST /api/v1/photos returns 422 without image" do
           post api_v1_photos_url, params: { photo: { title: "No Image" } }
 
