@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  focal_x: 9.99
+  focal_y: 9.99
+  mobile_focal_x: 9.99
+  mobile_focal_y: 9.99
+  published: false
+
+two:
+  title: MyString
+  description: MyText
+  focal_x: 9.99
+  focal_y: 9.99
+  mobile_focal_x: 9.99
+  mobile_focal_y: 9.99
+  published: false
