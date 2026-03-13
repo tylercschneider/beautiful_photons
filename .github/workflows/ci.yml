@@ -52,11 +52,6 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
-      - name: Prepare database
-        env:
-          RAILS_ENV: test
-        run: bundle exec rake db:migrate
-
       - name: Run tests
         env:
           RAILS_ENV: test

@@ -13,4 +13,9 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = false
 end
 
+task "db:test:prepare" do
+  Rake::Task["app:db:migrate"].invoke
+end
+
+task test: "db:test:prepare"
 task default: :test
