@@ -25,6 +25,18 @@ module BeautifulPhotons
           assert_equal "Our work", json["description"]
         end
 
+        test "GET /api/v1/galleries/:id returns a single gallery" do
+          gallery = Gallery.create!(name: "services", title: "Services")
+
+          get api_v1_gallery_url(gallery)
+
+          assert_response :ok
+
+          json = JSON.parse(response.body)
+          assert_equal "services", json["name"]
+          assert_equal gallery.id, json["id"]
+        end
+
         test "POST /api/v1/galleries returns 422 without name" do
           post api_v1_galleries_url, params: { gallery: { title: "No Name" } }
 

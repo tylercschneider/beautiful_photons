@@ -9,6 +9,11 @@ module BeautifulPhotons
           render json: galleries.map { |gallery| gallery_json(gallery) }
         end
 
+        def show
+          gallery = Gallery.find(params[:id])
+          render json: gallery_json(gallery)
+        end
+
         def create
           gallery = Gallery.new(gallery_params)
 
