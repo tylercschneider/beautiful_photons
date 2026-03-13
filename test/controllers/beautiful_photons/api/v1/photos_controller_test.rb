@@ -26,6 +26,15 @@ module BeautifulPhotons
           assert_equal 50.0, json["focal_x"]
           assert_equal 50.0, json["focal_y"]
         end
+
+        test "POST /api/v1/photos returns 422 without image" do
+          post api_v1_photos_url, params: { photo: { title: "No Image" } }
+
+          assert_response :unprocessable_entity
+
+          json = JSON.parse(response.body)
+          assert_includes json["errors"], "Image can't be blank"
+        end
       end
     end
   end
