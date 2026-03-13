@@ -14,6 +14,16 @@ module BeautifulPhotons
           render json: photo_json(photo)
         end
 
+        def update
+          photo = Photo.find(params[:id])
+
+          if photo.update(photo_params)
+            render json: photo_json(photo)
+          else
+            render json: { errors: photo.errors.full_messages }, status: :unprocessable_entity
+          end
+        end
+
         def create
           photo = Photo.new(photo_params)
 
@@ -28,7 +38,7 @@ module BeautifulPhotons
 
         def photo_params
           params.require(:photo).permit(:title, :description, :image, :focal_x, :focal_y,
-                                        :mobile_focal_x, :mobile_focal_y)
+                                        :mobile_focal_x, :mobile_focal_y, :published)
         end
 
         def photo_json(photo)

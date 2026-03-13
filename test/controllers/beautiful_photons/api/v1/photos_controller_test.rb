@@ -52,6 +52,22 @@ module BeautifulPhotons
           assert_equal photo.id, json.first["id"]
         end
 
+        test "PATCH /api/v1/photos/:id updates metadata and focal points" do
+          photo = create_photo(title: "Old Title")
+
+          patch api_v1_photo_url(photo), params: {
+            photo: { title: "New Title", focal_x: 25.0, focal_y: 75.0, published: true }
+          }
+
+          assert_response :ok
+
+          json = JSON.parse(response.body)
+          assert_equal "New Title", json["title"]
+          assert_equal 25.0, json["focal_x"]
+          assert_equal 75.0, json["focal_y"]
+          assert_equal true, json["published"]
+        end
+
         test "POST /api/v1/photos returns 422 without image" do
           post api_v1_photos_url, params: { photo: { title: "No Image" } }
 
