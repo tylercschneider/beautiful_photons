@@ -25,6 +25,15 @@ module BeautifulPhotons
           assert_equal "Our work", json["description"]
         end
 
+        test "POST /api/v1/galleries returns 422 without name" do
+          post api_v1_galleries_url, params: { gallery: { title: "No Name" } }
+
+          assert_response :unprocessable_entity
+
+          json = JSON.parse(response.body)
+          assert_includes json["errors"], "Name can't be blank"
+        end
+
         test "GET /api/v1/galleries returns list of galleries" do
           Gallery.create!(name: "homepage", title: "Homepage")
 
