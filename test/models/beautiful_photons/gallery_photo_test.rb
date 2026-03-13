@@ -17,5 +17,11 @@ module BeautifulPhotons
       gallery_photo = GalleryPhoto.new(gallery: @gallery, photo: @photo, position: 1)
       assert gallery_photo.valid?
     end
+
+    test "invalid without position" do
+      gallery_photo = GalleryPhoto.new(gallery: @gallery, photo: @photo)
+      assert_not gallery_photo.valid?
+      assert_includes gallery_photo.errors[:position], "can't be blank"
+    end
   end
 end
