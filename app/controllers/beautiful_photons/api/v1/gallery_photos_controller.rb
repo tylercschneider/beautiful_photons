@@ -15,6 +15,13 @@ module BeautifulPhotons
           end
         end
 
+        def destroy
+          gallery = Gallery.find(params[:gallery_id])
+          gallery_photo = gallery.gallery_photos.find(params[:id])
+          gallery_photo.destroy!
+          head :no_content
+        end
+
         def update
           gallery = Gallery.find(params[:gallery_id])
           gallery_photo = gallery.gallery_photos.find(params[:id])

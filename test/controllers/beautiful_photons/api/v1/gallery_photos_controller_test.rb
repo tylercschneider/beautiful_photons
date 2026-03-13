@@ -41,6 +41,16 @@ module BeautifulPhotons
           assert_equal "bathrooms", json["category"]
         end
 
+        test "DELETE /api/v1/galleries/:id/photos/:id removes photo from gallery" do
+          gp = GalleryPhoto.create!(gallery: @gallery, photo: @photo, position: 1)
+
+          assert_difference("BeautifulPhotons::GalleryPhoto.count", -1) do
+            delete api_v1_gallery_photo_url(@gallery, gp)
+          end
+
+          assert_response :no_content
+        end
+
         private
 
         def create_photo(title: "Test Photo")
