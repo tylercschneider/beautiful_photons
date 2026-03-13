@@ -1,4 +1,4 @@
-class CreateBeautifulPhotonsPhotos < ActiveRecord::Migration[8.1]
+class CreateBeautifulPhotonsPhotos < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
   def change
     create_table :beautiful_photons_photos do |t|
       t.string :title
