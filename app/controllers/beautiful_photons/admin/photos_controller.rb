@@ -11,6 +11,10 @@ module BeautifulPhotons
         @photo = BeautifulPhotons::Photo.find(params[:id])
       end
 
+      def edit
+        @photo = BeautifulPhotons::Photo.find(params[:id])
+      end
+
       def update
         @photo = BeautifulPhotons::Photo.find(params[:id])
         @photo.update!(photo_params)

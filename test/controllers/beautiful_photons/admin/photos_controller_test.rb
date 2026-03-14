@@ -39,6 +39,16 @@ module BeautifulPhotons
         assert_equal 70.0, photo.focal_y
       end
 
+      test "GET /admin/photos/:id/edit renders the focal point editor" do
+        photo = create_photo(title: "Lake Photo")
+
+        get edit_admin_photo_url(photo)
+
+        assert_response :ok
+        assert_select "img[alt='Lake Photo']"
+        assert_select "form"
+      end
+
       private
 
       def create_photo(title: "Test Photo")
