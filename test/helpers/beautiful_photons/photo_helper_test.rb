@@ -49,6 +49,16 @@ module BeautifulPhotons
       assert_equal %w[Second Test], titles
     end
 
+    test "beautiful_photons_photos returns photos for a gallery" do
+      gallery = Gallery.create!(name: "query_gallery", title: "Query")
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
+
+      photos = beautiful_photons_photos("query_gallery")
+
+      assert_equal 1, photos.length
+      assert_equal @photo, photos.first
+    end
+
     private
 
     def create_photo(title)

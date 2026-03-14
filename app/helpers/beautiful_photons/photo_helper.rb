@@ -26,5 +26,12 @@ module BeautifulPhotons
       photos = gallery.gallery_photos.order(:position).map(&:photo)
       photos.each { |photo| yield photo }
     end
+
+    def beautiful_photons_photos(gallery_name, category: nil)
+      gallery = Gallery.find_by!(name: gallery_name)
+      scope = gallery.gallery_photos.order(:position)
+      scope = scope.where(category: category) if category
+      scope.map(&:photo)
+    end
   end
 end
