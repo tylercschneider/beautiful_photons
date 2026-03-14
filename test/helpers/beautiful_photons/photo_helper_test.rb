@@ -59,6 +59,18 @@ module BeautifulPhotons
       assert_equal @photo, photos.first
     end
 
+    test "beautiful_photons_photos filters by category" do
+      gallery = Gallery.create!(name: "filtered_gallery", title: "Filtered")
+      photo2 = create_photo("Other")
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1, category: "backsplashes")
+      GalleryPhoto.create!(gallery: gallery, photo: photo2, position: 2, category: "bathrooms")
+
+      photos = beautiful_photons_photos("filtered_gallery", category: "backsplashes")
+
+      assert_equal 1, photos.length
+      assert_equal @photo, photos.first
+    end
+
     private
 
     def create_photo(title)
