@@ -19,6 +19,15 @@ module BeautifulPhotons
         assert_select "img[alt='Sunset Beach']"
       end
 
+      test "GET /admin/photos/:id renders the photo detail page" do
+        photo = create_photo(title: "Mountain View")
+
+        get admin_photo_url(photo)
+
+        assert_response :ok
+        assert_select "img[alt='Mountain View']"
+      end
+
       private
 
       def create_photo(title: "Test Photo")
