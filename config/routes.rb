@@ -1,4 +1,8 @@
 BeautifulPhotons::Engine.routes.draw do
+  namespace :admin do
+    resources :photos, only: [ :index, :show, :edit, :update ]
+  end
+
   namespace :api do
     namespace :v1 do
       resources :photos

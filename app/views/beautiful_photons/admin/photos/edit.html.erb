@@ -1,0 +1,32 @@
+<%= ui_form_page(title: "Edit Photo", back_url: admin_photo_path(@photo)) %>
+
+<%= ui_page do %>
+  <%= ui_section do %>
+    <% if @photo.image.attached? %>
+      <%= image_tag @photo.image, alt: @photo.title, style: "width: 100%; object-fit: cover;" %>
+    <% end %>
+  <% end %>
+
+  <%= form_with(model: @photo, url: admin_photo_path(@photo), method: :patch) do |f| %>
+    <%= ui_section(title: "Details") do %>
+      <%= ui_form_field(attribute: :title, label: "Title") %>
+      <%= ui_form_field(attribute: :description, label: "Description") %>
+    <% end %>
+
+    <%= ui_section(title: "Focal Point") do %>
+      <%= ui_grid(cols: { default: 2 }, gap: :md) do %>
+        <%= ui_form_field(attribute: :focal_x, label: "Focal X (%)", type: :number, min: 0, max: 100) %>
+        <%= ui_form_field(attribute: :focal_y, label: "Focal Y (%)", type: :number, min: 0, max: 100) %>
+      <% end %>
+    <% end %>
+
+    <%= ui_section(title: "Mobile Focal Point") do %>
+      <%= ui_grid(cols: { default: 2 }, gap: :md) do %>
+        <%= ui_form_field(attribute: :mobile_focal_x, label: "Mobile Focal X (%)", type: :number, min: 0, max: 100) %>
+        <%= ui_form_field(attribute: :mobile_focal_y, label: "Mobile Focal Y (%)", type: :number, min: 0, max: 100) %>
+      <% end %>
+    <% end %>
+
+    <%= ui_button(label: "Save") %>
+  <% end %>
+<% end %>
