@@ -28,6 +28,17 @@ module BeautifulPhotons
         assert_select "img[alt='Mountain View']"
       end
 
+      test "PATCH /admin/photos/:id updates focal points" do
+        photo = create_photo(title: "Beach")
+
+        patch admin_photo_url(photo), params: { photo: { focal_x: 30.0, focal_y: 70.0 } }, as: :json
+
+        assert_response :redirect
+        photo.reload
+        assert_equal 30.0, photo.focal_x
+        assert_equal 70.0, photo.focal_y
+      end
+
       private
 
       def create_photo(title: "Test Photo")
