@@ -9,6 +9,10 @@ gem "sqlite3"
 
 gem "propshaft"
 
+gem "keystone_ui", github: "tylercschneider/keystone_ui"
+
+gem "tailwindcss-rails", "~> 4.0"
+
 # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
 gem "rubocop-rails-omakase", require: false
 
