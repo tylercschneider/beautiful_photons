@@ -36,5 +36,52 @@ module BeautifulPhotons
       assert_includes html, 'data-mobile-focal-x="40.0"'
       assert_includes html, 'data-mobile-focal-y="20.0"'
     end
+
+    test "beautiful_photons_gallery yields photos in position order" do
+      gallery = Gallery.create!(name: "test_gallery", title: "Test")
+      photo2 = create_photo("Second")
+      GalleryPhoto.create!(gallery: gallery, photo: photo2, position: 1)
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 2)
+
+      titles = []
+      beautiful_photons_gallery("test_gallery") { |photo| titles << photo.title }
+
+      assert_equal %w[Second Test], titles
+    end
+
+    test "beautiful_photons_photos returns photos for a gallery" do
+      gallery = Gallery.create!(name: "query_gallery", title: "Query")
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
+
+      photos = beautiful_photons_photos("query_gallery")
+
+      assert_equal 1, photos.length
+      assert_equal @photo, photos.first
+    end
+
+    test "beautiful_photons_photos filters by category" do
+      gallery = Gallery.create!(name: "filtered_gallery", title: "Filtered")
+      photo2 = create_photo("Other")
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1, category: "backsplashes")
+      GalleryPhoto.create!(gallery: gallery, photo: photo2, position: 2, category: "bathrooms")
+
+      photos = beautiful_photons_photos("filtered_gallery", category: "backsplashes")
+
+      assert_equal 1, photos.length
+      assert_equal @photo, photos.first
+    end
+
+    private
+
+    def create_photo(title)
+      photo = Photo.new(title: title)
+      photo.image.attach(
+        io: File.open(file_fixture("test_image.jpg")),
+        filename: "test_image.jpg",
+        content_type: "image/jpeg"
+      )
+      photo.save!
+      photo
+    end
   end
 end
