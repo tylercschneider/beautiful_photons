@@ -11,6 +11,20 @@ module BeautifulPhotons
         @photo = BeautifulPhotons::Photo.find(params[:id])
       end
 
+      def new
+        @photo = BeautifulPhotons::Photo.new
+      end
+
+      def create
+        @photo = BeautifulPhotons::Photo.new(photo_params)
+
+        if @photo.save
+          redirect_to admin_photo_path(@photo)
+        else
+          render :new, status: :unprocessable_entity
+        end
+      end
+
       def edit
         @photo = BeautifulPhotons::Photo.find(params[:id])
       end
@@ -24,7 +38,7 @@ module BeautifulPhotons
       private
 
       def photo_params
-        params.require(:photo).permit(:title, :description, :focal_x, :focal_y, :mobile_focal_x, :mobile_focal_y, :published)
+        params.require(:photo).permit(:title, :description, :image, :focal_x, :focal_y, :mobile_focal_x, :mobile_focal_y, :published)
       end
     end
   end

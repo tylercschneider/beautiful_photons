@@ -69,6 +69,15 @@ module BeautifulPhotons
         assert_select "input[name='photo[focal_y]']"
       end
 
+      test "GET /admin/photos/new renders the upload form" do
+        get new_admin_photo_url
+
+        assert_response :ok
+        assert_select "form"
+        assert_select "input[type='file']"
+        assert_match "Title", response.body
+      end
+
       private
 
       def create_photo(title: "Test Photo")

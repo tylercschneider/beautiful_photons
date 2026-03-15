@@ -1,0 +1,16 @@
+<%= ui_form_page(title: "Upload Photo", back_url: admin_photos_path) %>
+
+<%= ui_page do %>
+  <%= form_with(model: @photo, url: admin_photos_path, method: :post) do |f| %>
+    <%= ui_section(title: "Image") do %>
+      <input type="file" name="photo[image]" accept="image/*">
+    <% end %>
+
+    <%= ui_section(title: "Details") do %>
+      <%= ui_form_field(attribute: :title, label: "Title") %>
+      <%= ui_form_field(attribute: :description, label: "Description") %>
+    <% end %>
+
+    <%= ui_button(label: "Upload") %>
+  <% end %>
+<% end %>
