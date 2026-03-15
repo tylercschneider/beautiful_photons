@@ -1,0 +1,30 @@
+{
+  "name": "beautiful_photons",
+  "version": "1.0.0",
+  "description": "Short description and motivation.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tylercschneider/beautiful_photons.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tylercschneider/beautiful_photons/issues"
+  },
+  "homepage": "https://github.com/tylercschneider/beautiful_photons#readme",
+  "devDependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "jsdom": "^27.0.1",
+    "vitest": "^3.2.4"
+  }
+}

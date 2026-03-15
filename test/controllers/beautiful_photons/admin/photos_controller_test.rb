@@ -49,6 +49,26 @@ module BeautifulPhotons
         assert_select "form"
       end
 
+      test "GET /admin/photos links each photo to its edit page" do
+        photo = create_photo(title: "Linked Photo")
+
+        get admin_photos_url
+
+        assert_select "a[href*='edit']"
+      end
+
+      test "GET /admin/photos/:id/edit renders focal point picker with pin" do
+        photo = create_photo(title: "Garden")
+
+        get edit_admin_photo_url(photo)
+
+        assert_response :ok
+        assert_select "[data-focal-point-target='image']"
+        assert_select "[data-focal-point-target='pin']"
+        assert_select "input[name='photo[focal_x]']"
+        assert_select "input[name='photo[focal_y]']"
+      end
+
       private
 
       def create_photo(title: "Test Photo")
