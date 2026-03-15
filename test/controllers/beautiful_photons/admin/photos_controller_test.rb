@@ -49,6 +49,14 @@ module BeautifulPhotons
         assert_select "form"
       end
 
+      test "GET /admin/photos links each photo to its edit page" do
+        photo = create_photo(title: "Linked Photo")
+
+        get admin_photos_url
+
+        assert_select "a[href*='edit']"
+      end
+
       test "GET /admin/photos/:id/edit renders focal point picker with pin" do
         photo = create_photo(title: "Garden")
 
