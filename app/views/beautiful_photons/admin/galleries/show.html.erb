@@ -1,0 +1,19 @@
+<%= ui_show_page(title: @gallery.title, back_url: admin_galleries_path) %>
+
+<%= ui_page do %>
+  <%= ui_page_header(title: @gallery.title) %>
+
+  <%= ui_section(title: "Photos") do %>
+    <div data-controller="reorder" data-reorder-url-value="<%= reorder_admin_gallery_path(@gallery) %>">
+      <% @gallery_photos.each do |gp| %>
+        <% if gp.photo.image.attached? %>
+          <div data-reorder-target="item" data-photo-id="<%= gp.photo.id %>" draggable="true"
+               data-action="dragstart->reorder#dragstart dragover->reorder#dragover drop->reorder#drop"
+               style="cursor: grab;">
+            <%= image_tag gp.photo.image, alt: gp.photo.title, style: "width: 100%; aspect-ratio: 16/9; object-fit: cover;" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

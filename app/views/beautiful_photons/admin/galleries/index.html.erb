@@ -1,0 +1,9 @@
+<%= ui_page do %>
+  <%= ui_page_header(title: "Galleries") %>
+
+  <% @galleries.each do |gallery| %>
+    <%= ui_card_link(href: admin_gallery_path(gallery)) do %>
+      <%= gallery.title %>
+    <% end %>
+  <% end %>
+<% end %>
