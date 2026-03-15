@@ -8,7 +8,7 @@
           <%= image_tag @photo.image,
             alt: @photo.title,
             style: "width: 100%; display: block;",
-            data: { focal_point_target: "image" } %>
+            data: { focal_point_target: "image", action: "click->focal-point#pick" } %>
         <% end %>
         <div data-focal-point-target="pin"
              style="position: absolute; width: 20px; height: 20px; background: rgba(255,0,0,0.8); border: 2px solid white; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; left: <%= @photo.focal_x %>%; top: <%= @photo.focal_y %>%;">
@@ -33,28 +33,3 @@
     <%= ui_button(label: "Save") %>
   <% end %>
 <% end %>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  var container = document.querySelector("[data-controller='focal-point']");
-  if (!container) return;
-
-  var image = container.querySelector("[data-focal-point-target='image']");
-  var pin = container.querySelector("[data-focal-point-target='pin']");
-  var focalX = container.querySelector("[data-focal-point-target='focalX']");
-  var focalY = container.querySelector("[data-focal-point-target='focalY']");
-
-  if (!image) return;
-
-  image.addEventListener("click", function(event) {
-    var rect = image.getBoundingClientRect();
-    var x = ((event.clientX - rect.left) / rect.width * 100).toFixed(1);
-    var y = ((event.clientY - rect.top) / rect.height * 100).toFixed(1);
-
-    focalX.value = x;
-    focalY.value = y;
-    pin.style.left = x + "%";
-    pin.style.top = y + "%";
-  });
-});
-</script>
