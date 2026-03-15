@@ -20,6 +20,34 @@ module BeautifulPhotons
         assert_select "h1", "Galleries"
         assert_select "a", "Homepage Gallery"
       end
+
+      test "GET /admin/galleries/:id shows photos in position order" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo_a = create_photo(title: "First")
+        photo_b = create_photo(title: "Second")
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo_b, position: 1)
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo_a, position: 2)
+
+        get admin_gallery_url(gallery)
+
+        assert_response :ok
+        assert_match "Portfolio", response.body
+        assert_select "img[alt='Second']"
+        assert_select "img[alt='First']"
+      end
+
+      private
+
+      def create_photo(title: "Test Photo")
+        photo = BeautifulPhotons::Photo.new(title: title)
+        photo.image.attach(
+          io: File.open(File.expand_path("../../../fixtures/files/test_image.jpg", __dir__)),
+          filename: "test_image.jpg",
+          content_type: "image/jpeg"
+        )
+        photo.save!
+        photo
+      end
     end
   end
 end

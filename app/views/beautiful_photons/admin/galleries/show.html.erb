@@ -1,0 +1,13 @@
+<%= ui_show_page(title: @gallery.title, back_url: admin_galleries_path) %>
+
+<%= ui_page do %>
+  <%= ui_page_header(title: @gallery.title) %>
+
+  <%= ui_section(title: "Photos") do %>
+    <% @gallery_photos.each do |gp| %>
+      <% if gp.photo.image.attached? %>
+        <%= image_tag gp.photo.image, alt: gp.photo.title, style: "width: 100%; aspect-ratio: 16/9; object-fit: cover;" %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
