@@ -36,6 +36,20 @@ module BeautifulPhotons
         assert_select "img[alt='First']"
       end
 
+      test "PATCH /admin/galleries/:id/reorder updates photo positions" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo_a = create_photo(title: "A")
+        photo_b = create_photo(title: "B")
+        gp_a = BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo_a, position: 1)
+        gp_b = BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo_b, position: 2)
+
+        patch reorder_admin_gallery_url(gallery), params: { photo_ids: [ photo_b.id, photo_a.id ] }, as: :json
+
+        assert_response :ok
+        assert_equal 1, gp_b.reload.position
+        assert_equal 2, gp_a.reload.position
+      end
+
       private
 
       def create_photo(title: "Test Photo")
