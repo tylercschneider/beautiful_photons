@@ -1,6 +1,7 @@
 BeautifulPhotons::Engine.routes.draw do
   namespace :admin do
     resources :photos, only: [ :index, :show, :edit, :update ]
+    resources :galleries, only: [ :index, :show ]
   end
 
   namespace :api do
