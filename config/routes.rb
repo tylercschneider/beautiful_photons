@@ -3,6 +3,8 @@ BeautifulPhotons::Engine.routes.draw do
     resources :photos, only: [ :index, :show, :new, :create, :edit, :update ]
     resources :galleries, only: [ :index, :show ] do
       patch :reorder, on: :member
+      post :add_photos, on: :member
+      delete :remove_photo, on: :member
     end
   end
 
