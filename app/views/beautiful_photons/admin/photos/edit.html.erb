@@ -13,20 +13,28 @@
         <div data-focal-point-target="pin"
              style="position: absolute; width: 20px; height: 20px; background: rgba(255,0,0,0.8); border: 2px solid white; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; left: <%= @photo.focal_x %>%; top: <%= @photo.focal_y %>%;">
         </div>
-        <input type="hidden" name="photo[focal_x]" value="<%= @photo.focal_x %>" data-focal-point-target="focalX">
-        <input type="hidden" name="photo[focal_y]" value="<%= @photo.focal_y %>" data-focal-point-target="focalY">
+        <%= f.hidden_field :focal_x, data: { focal_point_target: "focalX" } %>
+        <%= f.hidden_field :focal_y, data: { focal_point_target: "focalY" } %>
       </div>
     <% end %>
 
     <%= ui_section(title: "Details") do %>
-      <%= ui_form_field(attribute: :title, label: "Title") %>
-      <%= ui_form_field(attribute: :description, label: "Description") %>
+      <label>Title</label>
+      <%= f.text_field :title %>
+      <label>Description</label>
+      <%= f.text_area :description %>
     <% end %>
 
     <%= ui_section(title: "Mobile Focal Point") do %>
       <%= ui_grid(cols: { default: 2 }, gap: :md) do %>
-        <%= ui_form_field(attribute: :mobile_focal_x, label: "Mobile Focal X (%)", type: :number, min: 0, max: 100) %>
-        <%= ui_form_field(attribute: :mobile_focal_y, label: "Mobile Focal Y (%)", type: :number, min: 0, max: 100) %>
+        <div>
+          <label>Mobile Focal X (%)</label>
+          <%= f.number_field :mobile_focal_x, min: 0, max: 100 %>
+        </div>
+        <div>
+          <label>Mobile Focal Y (%)</label>
+          <%= f.number_field :mobile_focal_y, min: 0, max: 100 %>
+        </div>
       <% end %>
     <% end %>
 
