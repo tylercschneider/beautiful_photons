@@ -2,7 +2,7 @@
   <%= ui_page_header(title: "Galleries") %>
 
   <% @galleries.each do |gallery| %>
-    <%= ui_card_link(href: beautiful_photons.gallery_path(gallery)) do %>
+    <%= ui_card_link(href: gallery_path(gallery)) do %>
       <%= gallery.title %>
     <% end %>
   <% end %>
