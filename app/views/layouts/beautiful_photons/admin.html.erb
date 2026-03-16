@@ -14,8 +14,8 @@
       <%= link_to "Admin", main_app.madmin_root_path, style: "color: #6b7280; text-decoration: none;" %>
       <span style="color: #d1d5db;">|</span>
     <% end %>
-    <%= ui_button(label: "Photos", href: beautiful_photons.photos_path, variant: controller_name == "photos" ? :primary : :secondary, size: :sm) %>
-    <%= ui_button(label: "Galleries", href: beautiful_photons.galleries_path, variant: controller_name == "galleries" ? :primary : :secondary, size: :sm) %>
+    <%= ui_nav_item(label: "Photos", href: beautiful_photons.photos_path, active: controller_name == "photos") %>
+    <%= ui_nav_item(label: "Galleries", href: beautiful_photons.galleries_path, active: controller_name == "galleries") %>
   </nav>
 
   <main style="padding: 1rem;">
