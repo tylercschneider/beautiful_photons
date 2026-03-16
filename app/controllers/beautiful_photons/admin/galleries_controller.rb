@@ -9,6 +9,20 @@ module BeautifulPhotons
         @galleries = BeautifulPhotons::Gallery.all.order(:title)
       end
 
+      def new
+        @gallery = BeautifulPhotons::Gallery.new
+      end
+
+      def create
+        @gallery = BeautifulPhotons::Gallery.new(gallery_params)
+
+        if @gallery.save
+          redirect_to beautiful_photons.gallery_path(@gallery)
+        else
+          render :new, status: :unprocessable_entity
+        end
+      end
+
       def show
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
         @gallery_photos = @gallery.gallery_photos.includes(:photo).order(:position)
@@ -44,6 +58,12 @@ module BeautifulPhotons
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
         @gallery.gallery_photos.where(photo_id: params[:photo_id]).destroy_all
         redirect_to beautiful_photons.gallery_path(@gallery)
+      end
+
+      private
+
+      def gallery_params
+        params.require(:gallery).permit(:name, :title, :description)
       end
     end
   end

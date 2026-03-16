@@ -1,5 +1,9 @@
 <%= ui_page(max_width: :lg) do %>
-  <%= ui_page_header(title: "Galleries") %>
+  <%= ui_page_header(title: "Galleries") do |header| %>
+    <% header.action do %>
+      <%= ui_button(label: "New", href: beautiful_photons.new_gallery_path) %>
+    <% end %>
+  <% end %>
 
   <% @galleries.each do |gallery| %>
     <%= ui_card_link(href: beautiful_photons.gallery_path(gallery)) do %>

@@ -49,6 +49,17 @@ module BeautifulPhotons
         assert_equal 2, gp_a.reload.position
       end
 
+      test "POST /galleries creates a gallery and redirects" do
+        assert_difference("BeautifulPhotons::Gallery.count", 1) do
+          post galleries_url, params: { gallery: { name: "test_gallery", title: "Test Gallery" } }
+        end
+
+        gallery = BeautifulPhotons::Gallery.last
+        assert_redirected_to gallery_path(gallery)
+        assert_equal "test_gallery", gallery.name
+        assert_equal "Test Gallery", gallery.title
+      end
+
       test "DELETE /galleries/:id/remove_photo removes a photo from gallery" do
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
         photo = create_photo(title: "Remove Me")
