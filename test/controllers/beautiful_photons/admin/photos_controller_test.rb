@@ -69,6 +69,36 @@ module BeautifulPhotons
         assert_select "input[name='photo[focal_y]']"
       end
 
+      test "GET /admin/photos has an upload link" do
+        get admin_photos_url
+
+        assert_response :ok
+        assert_match "Upload", response.body
+        assert_match new_admin_photo_path, response.body
+      end
+
+      test "POST /admin/photos creates a photo and redirects" do
+        image = fixture_file_upload("test_image.jpg", "image/jpeg")
+
+        assert_difference("BeautifulPhotons::Photo.count", 1) do
+          post admin_photos_url, params: { photo: { title: "New Upload", image: image } }
+        end
+
+        photo = BeautifulPhotons::Photo.last
+        assert_redirected_to admin_photo_path(photo)
+        assert_equal "New Upload", photo.title
+        assert photo.image.attached?
+      end
+
+      test "GET /admin/photos/new renders the upload form" do
+        get new_admin_photo_url
+
+        assert_response :ok
+        assert_select "form"
+        assert_select "input[type='file']"
+        assert_match "Title", response.body
+      end
+
       private
 
       def create_photo(title: "Test Photo")
