@@ -1,18 +1,14 @@
 <%= ui_form_page(title: "Upload Photo", back_url: beautiful_photons.photos_path) %>
 
-<%= ui_page do %>
-  <%= ui_form(action: beautiful_photons.photos_path, method: :post, multipart: true) do %>
-    <%= ui_section(title: "Image") do %>
-      <%= ui_file_upload(name: "photo[image]", accept: "image/*") %>
-    <% end %>
-
-    <%= ui_section(title: "Details") do %>
-      <label>Title</label>
-      <%= ui_input(name: "photo[title]") %>
-      <label>Description</label>
-      <%= ui_textarea(name: "photo[description]") %>
-    <% end %>
-
-    <%= ui_button(label: "Upload") %>
+<%= ui_form(action: beautiful_photons.photos_path, method: :post, multipart: true) do %>
+  <%= ui_section(title: "Image") do %>
+    <%= ui_file_upload(name: "photo[image]", accept: "image/*") %>
   <% end %>
+
+  <%= ui_section(title: "Details") do %>
+    <%= ui_input(name: "photo[title]", placeholder: "Title") %>
+    <%= ui_textarea(name: "photo[description]", placeholder: "Description") %>
+  <% end %>
+
+  <%= ui_button(label: "Upload") %>
 <% end %>

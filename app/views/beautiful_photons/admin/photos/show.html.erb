@@ -1,9 +1,7 @@
 <%= ui_show_page(title: @photo.title, back_url: beautiful_photons.photos_path) %>
 
-<%= ui_page do %>
-  <%= ui_section do %>
-    <% if @photo.image.attached? %>
-      <%= image_tag @photo.image, alt: @photo.title, style: "width: 100%; object-fit: cover;" %>
-    <% end %>
+<%= ui_section do %>
+  <% if @photo.image.attached? %>
+    <%= image_tag @photo.image, alt: @photo.title, style: "width: 100%; object-fit: cover;" %>
   <% end %>
 <% end %>
