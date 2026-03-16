@@ -49,6 +49,42 @@ module BeautifulPhotons
         assert_equal 2, gp_a.reload.position
       end
 
+      test "POST /galleries creates a gallery and redirects" do
+        assert_difference("BeautifulPhotons::Gallery.count", 1) do
+          post galleries_url, params: { gallery: { name: "test_gallery", title: "Test Gallery" } }
+        end
+
+        gallery = BeautifulPhotons::Gallery.last
+        assert_redirected_to gallery_path(gallery)
+        assert_equal "test_gallery", gallery.name
+        assert_equal "Test Gallery", gallery.title
+      end
+
+      test "DELETE /galleries/:id/remove_photo removes a photo from gallery" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo = create_photo(title: "Remove Me")
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1)
+
+        assert_difference("BeautifulPhotons::GalleryPhoto.count", -1) do
+          delete remove_photo_gallery_url(gallery), params: { photo_id: photo.id }
+        end
+
+        assert_response :redirect
+      end
+
+      test "POST /galleries/:id/add_photos adds photos to gallery" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo_a = create_photo(title: "A")
+        photo_b = create_photo(title: "B")
+
+        assert_difference("BeautifulPhotons::GalleryPhoto.count", 2) do
+          post add_photos_gallery_url(gallery), params: { photo_ids: [ photo_a.id, photo_b.id ] }, as: :json
+        end
+
+        assert_response :redirect
+        assert_equal [ photo_a.id, photo_b.id ], gallery.gallery_photos.order(:position).pluck(:photo_id)
+      end
+
       private
 
       def create_photo(title: "Test Photo")

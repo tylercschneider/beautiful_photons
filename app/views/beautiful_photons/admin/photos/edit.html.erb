@@ -1,33 +1,35 @@
 <%= ui_form_page(title: "Edit Photo", back_url: beautiful_photons.photo_path(@photo)) %>
 
-<%= ui_form(action: beautiful_photons.photo_path(@photo), method: :patch) do %>
-  <%= ui_section(title: "Focal Point") do %>
-    <div data-controller="focal-point" style="position: relative; cursor: crosshair;">
-      <% if @photo.image.attached? %>
-        <%= image_tag @photo.image,
-          alt: @photo.title,
-          style: "width: 100%; display: block;",
-          data: { focal_point_target: "image", action: "click->focal-point#pick" } %>
-      <% end %>
-      <div data-focal-point-target="pin"
-           style="position: absolute; width: 20px; height: 20px; background: rgba(255,0,0,0.8); border: 2px solid white; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; left: <%= @photo.focal_x %>%; top: <%= @photo.focal_y %>%;">
+<%= ui_page(max_width: :lg) do %>
+  <%= ui_form(action: beautiful_photons.photo_path(@photo), method: :patch) do %>
+    <%= ui_section(title: "Focal Point") do %>
+      <div data-controller="focal-point" style="position: relative; cursor: crosshair;">
+        <% if @photo.image.attached? %>
+          <%= image_tag main_app.url_for(@photo.image),
+            alt: @photo.title,
+            style: "width: 100%; display: block;",
+            data: { focal_point_target: "image", action: "click->focal-point#pick" } %>
+        <% end %>
+        <div data-focal-point-target="pin"
+             style="position: absolute; width: 20px; height: 20px; background: rgba(255,0,0,0.8); border: 2px solid white; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; left: <%= @photo.focal_x %>%; top: <%= @photo.focal_y %>%;">
+        </div>
+        <input type="hidden" name="photo[focal_x]" value="<%= @photo.focal_x %>" data-focal-point-target="focalX">
+        <input type="hidden" name="photo[focal_y]" value="<%= @photo.focal_y %>" data-focal-point-target="focalY">
       </div>
-      <input type="hidden" name="photo[focal_x]" value="<%= @photo.focal_x %>" data-focal-point-target="focalX">
-      <input type="hidden" name="photo[focal_y]" value="<%= @photo.focal_y %>" data-focal-point-target="focalY">
-    </div>
-  <% end %>
-
-  <%= ui_section(title: "Details") do %>
-    <%= ui_input(name: "photo[title]", value: @photo.title) %>
-    <%= ui_textarea(name: "photo[description]", value: @photo.description) %>
-  <% end %>
-
-  <%= ui_section(title: "Mobile Focal Point") do %>
-    <%= ui_grid(cols: { default: 2 }, gap: :md) do %>
-      <%= ui_input(name: "photo[mobile_focal_x]", type: :number, value: @photo.mobile_focal_x, min: 0, max: 100) %>
-      <%= ui_input(name: "photo[mobile_focal_y]", type: :number, value: @photo.mobile_focal_y, min: 0, max: 100) %>
     <% end %>
-  <% end %>
 
-  <%= ui_button(label: "Save") %>
+    <%= ui_section(title: "Details") do %>
+      <%= ui_input(name: "photo[title]", value: @photo.title) %>
+      <%= ui_textarea(name: "photo[description]", value: @photo.description) %>
+    <% end %>
+
+    <%= ui_section(title: "Mobile Focal Point") do %>
+      <%= ui_grid(cols: { default: 2 }, gap: :md) do %>
+        <%= ui_input(name: "photo[mobile_focal_x]", type: :number, value: @photo.mobile_focal_x, min: 0, max: 100) %>
+        <%= ui_input(name: "photo[mobile_focal_y]", type: :number, value: @photo.mobile_focal_y, min: 0, max: 100) %>
+      <% end %>
+    <% end %>
+
+    <%= ui_button(label: "Save") %>
+  <% end %>
 <% end %>
