@@ -1,9 +1,7 @@
+<%= render "beautiful_photons/admin/nav" %>
+
 <%= ui_page do %>
   <%= ui_page_header(title: "Galleries") %>
-
-  <%= ui_section do %>
-    <%= ui_button(label: "Photos", href: beautiful_photons.photos_path, variant: :secondary, size: :sm) %>
-  <% end %>
 
   <% @galleries.each do |gallery| %>
     <%= ui_card_link(href: beautiful_photons.gallery_path(gallery)) do %>

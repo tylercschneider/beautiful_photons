@@ -1,12 +1,10 @@
+<%= render "beautiful_photons/admin/nav" %>
+
 <%= ui_page do %>
   <%= ui_page_header(title: "Photos") do |header| %>
     <% header.action do %>
       <%= ui_button(label: "Upload", href: beautiful_photons.new_photo_path) %>
     <% end %>
-  <% end %>
-
-  <%= ui_section do %>
-    <%= ui_button(label: "Galleries", href: beautiful_photons.galleries_path, variant: :secondary, size: :sm) %>
   <% end %>
 
   <%= ui_grid(cols: { default: 2, sm: 3, lg: 4 }, gap: :md) do %>
