@@ -1,4 +1,4 @@
-<%= ui_page do %>
+<%= ui_page(max_width: :lg) do %>
   <%= ui_page_header(title: "Photos") do |header| %>
     <% header.action do %>
       <%= ui_button(label: "Upload", href: beautiful_photons.new_photo_path) %>
