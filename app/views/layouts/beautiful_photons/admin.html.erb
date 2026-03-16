@@ -4,8 +4,7 @@
   <title>Photos Admin</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
-  <%= stylesheet_link_tag "application" %>
-  <%= javascript_importmap_tags if respond_to?(:javascript_importmap_tags) %>
+  <%= yield :head %>
 </head>
 <body>
   <nav style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-bottom: 1px solid #e5e7eb; background: #fff;">
