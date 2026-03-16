@@ -14,8 +14,8 @@
       <%= link_to "Admin", main_app.madmin_root_path, style: "color: #6b7280; text-decoration: none;" %>
       <span style="color: #d1d5db;">|</span>
     <% end %>
-    <%= ui_nav_item(label: "Photos", href: beautiful_photons.photos_path, active: controller_name == "photos") %>
-    <%= ui_nav_item(label: "Galleries", href: beautiful_photons.galleries_path, active: controller_name == "galleries") %>
+    <%= link_to "Photos", beautiful_photons.photos_path, class: "text-sm font-medium no-underline #{controller_name == 'photos' ? 'text-accent-600 border-b-2 border-accent-600 pb-1' : 'text-surface-500 hover:text-accent-600'}" %>
+    <%= link_to "Galleries", beautiful_photons.galleries_path, class: "text-sm font-medium no-underline #{controller_name == 'galleries' ? 'text-accent-600 border-b-2 border-accent-600 pb-1' : 'text-surface-500 hover:text-accent-600'}" %>
   </nav>
 
   <main style="padding: 1rem;">
