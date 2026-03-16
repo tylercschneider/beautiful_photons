@@ -5,11 +5,15 @@
     <% end %>
   <% end %>
 
+  <%= ui_section do %>
+    <%= ui_button(label: "Galleries", href: beautiful_photons.galleries_path, variant: :secondary, size: :sm) %>
+  <% end %>
+
   <%= ui_grid(cols: { default: 2, sm: 3, lg: 4 }, gap: :md) do %>
     <% @photos.each do |photo| %>
       <% if photo.image.attached? %>
-        <%= link_to beautiful_photons.edit_photo_path(photo) do %>
-          <%= image_tag photo.image, alt: photo.title, style: "width: 100%; aspect-ratio: 1; object-fit: cover;" %>
+        <%= link_to beautiful_photons.photo_path(photo) do %>
+          <%= image_tag main_app.url_for(photo.image), alt: photo.title, style: "width: 100%; aspect-ratio: 1; object-fit: cover;" %>
         <% end %>
       <% end %>
     <% end %>

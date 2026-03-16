@@ -1,7 +1,34 @@
-<%= ui_show_page(title: @photo.title, back_url: beautiful_photons.photos_path) %>
+<%= ui_show_page(title: @photo.title || "Untitled", back_url: beautiful_photons.photos_path) %>
 
 <%= ui_section do %>
   <% if @photo.image.attached? %>
-    <%= image_tag @photo.image, alt: @photo.title, style: "width: 100%; object-fit: cover;" %>
+    <%= image_tag main_app.url_for(@photo.image), alt: @photo.title, style: "width: 100%; object-fit: cover;" %>
+  <% end %>
+<% end %>
+
+<%= ui_section do %>
+  <%= ui_button(label: "Edit", href: beautiful_photons.edit_photo_path(@photo), variant: :secondary, size: :sm) %>
+<% end %>
+
+<% if @photo.description.present? %>
+  <%= ui_section(title: "Description") do %>
+    <p><%= @photo.description %></p>
+  <% end %>
+<% end %>
+
+<%= ui_section(title: "Galleries") do %>
+  <% gallery_photos = @photo.gallery_photos.includes(:gallery) %>
+  <% if gallery_photos.any? %>
+    <% gallery_photos.each do |gp| %>
+      <div>
+        <%= link_to gp.gallery.title, beautiful_photons.gallery_path(gp.gallery) %>
+        — position <%= gp.position %>
+        <% if gp.category.present? %>
+          (<%= gp.category %>)
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>Not in any galleries</p>
   <% end %>
 <% end %>

@@ -4,7 +4,7 @@
   <%= ui_section(title: "Focal Point") do %>
     <div data-controller="focal-point" style="position: relative; cursor: crosshair;">
       <% if @photo.image.attached? %>
-        <%= image_tag @photo.image,
+        <%= image_tag main_app.url_for(@photo.image),
           alt: @photo.title,
           style: "width: 100%; display: block;",
           data: { focal_point_target: "image", action: "click->focal-point#pick" } %>

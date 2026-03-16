@@ -7,7 +7,7 @@
         <div data-reorder-target="item" data-photo-id="<%= gp.photo.id %>" draggable="true"
              data-action="dragstart->reorder#dragstart dragover->reorder#dragover drop->reorder#drop"
              style="cursor: grab;">
-          <%= image_tag gp.photo.image, alt: gp.photo.title, style: "width: 100%; aspect-ratio: 16/9; object-fit: cover;" %>
+          <%= image_tag main_app.url_for(gp.photo.image), alt: gp.photo.title, style: "width: 100%; aspect-ratio: 16/9; object-fit: cover;" %>
         </div>
       <% end %>
     <% end %>
