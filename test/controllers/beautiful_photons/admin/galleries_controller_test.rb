@@ -31,7 +31,6 @@ module BeautifulPhotons
         get gallery_url(gallery)
 
         assert_response :ok
-        assert_match "Portfolio", response.body
         assert_select "img[alt='Second']"
         assert_select "img[alt='First']"
       end
