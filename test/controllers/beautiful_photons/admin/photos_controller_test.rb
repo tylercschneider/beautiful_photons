@@ -95,7 +95,7 @@ module BeautifulPhotons
 
         assert_response :ok
         assert_select "form"
-        assert_select "input[type='file']"
+        assert_match "photo[image]", response.body
         assert_match "Title", response.body
       end
 

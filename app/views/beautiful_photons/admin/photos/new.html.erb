@@ -1,16 +1,16 @@
 <%= ui_form_page(title: "Upload Photo", back_url: beautiful_photons.photos_path) %>
 
 <%= ui_page do %>
-  <%= form_with(model: @photo, url: beautiful_photons.photos_path, method: :post) do |f| %>
+  <%= ui_form(action: beautiful_photons.photos_path, method: :post, multipart: true) do %>
     <%= ui_section(title: "Image") do %>
-      <%= f.file_field :image, accept: "image/*" %>
+      <%= ui_file_upload(name: "photo[image]", accept: "image/*") %>
     <% end %>
 
     <%= ui_section(title: "Details") do %>
       <label>Title</label>
-      <%= f.text_field :title %>
+      <%= ui_input(name: "photo[title]") %>
       <label>Description</label>
-      <%= f.text_area :description %>
+      <%= ui_textarea(name: "photo[description]") %>
     <% end %>
 
     <%= ui_button(label: "Upload") %>

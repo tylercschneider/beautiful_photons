@@ -1,7 +1,7 @@
 <%= ui_form_page(title: "Edit Photo", back_url: beautiful_photons.photo_path(@photo)) %>
 
 <%= ui_page do %>
-  <%= form_with(model: @photo, url: beautiful_photons.photo_path(@photo), method: :patch) do |f| %>
+  <%= ui_form(action: beautiful_photons.photo_path(@photo), method: :patch) do %>
     <%= ui_section(title: "Focal Point") do %>
       <div data-controller="focal-point" style="position: relative; cursor: crosshair;">
         <% if @photo.image.attached? %>
@@ -13,27 +13,27 @@
         <div data-focal-point-target="pin"
              style="position: absolute; width: 20px; height: 20px; background: rgba(255,0,0,0.8); border: 2px solid white; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; left: <%= @photo.focal_x %>%; top: <%= @photo.focal_y %>%;">
         </div>
-        <%= f.hidden_field :focal_x, data: { focal_point_target: "focalX" } %>
-        <%= f.hidden_field :focal_y, data: { focal_point_target: "focalY" } %>
+        <input type="hidden" name="photo[focal_x]" value="<%= @photo.focal_x %>" data-focal-point-target="focalX">
+        <input type="hidden" name="photo[focal_y]" value="<%= @photo.focal_y %>" data-focal-point-target="focalY">
       </div>
     <% end %>
 
     <%= ui_section(title: "Details") do %>
       <label>Title</label>
-      <%= f.text_field :title %>
+      <%= ui_input(name: "photo[title]", value: @photo.title) %>
       <label>Description</label>
-      <%= f.text_area :description %>
+      <%= ui_textarea(name: "photo[description]", value: @photo.description) %>
     <% end %>
 
     <%= ui_section(title: "Mobile Focal Point") do %>
       <%= ui_grid(cols: { default: 2 }, gap: :md) do %>
         <div>
           <label>Mobile Focal X (%)</label>
-          <%= f.number_field :mobile_focal_x, min: 0, max: 100 %>
+          <%= ui_input(name: "photo[mobile_focal_x]", type: :number, value: @photo.mobile_focal_x, min: 0, max: 100) %>
         </div>
         <div>
           <label>Mobile Focal Y (%)</label>
-          <%= f.number_field :mobile_focal_y, min: 0, max: 100 %>
+          <%= ui_input(name: "photo[mobile_focal_y]", type: :number, value: @photo.mobile_focal_y, min: 0, max: 100) %>
         </div>
       <% end %>
     <% end %>
