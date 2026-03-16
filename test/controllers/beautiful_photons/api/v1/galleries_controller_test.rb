@@ -61,13 +61,13 @@ module BeautifulPhotons
           assert_response :no_content
         end
 
-        test "POST /api/v1/galleries returns 422 without name" do
-          post api_v1_galleries_url, params: { gallery: { title: "No Name" } }
+        test "POST /api/v1/galleries returns 422 without title" do
+          post api_v1_galleries_url, params: { gallery: { description: "No title" } }
 
           assert_response :unprocessable_entity
 
           json = JSON.parse(response.body)
-          assert_includes json["errors"], "Name can't be blank"
+          assert_includes json["errors"], "Title can't be blank"
         end
 
         test "GET /api/v1/galleries returns list of galleries" do

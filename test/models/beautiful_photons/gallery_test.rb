@@ -7,10 +7,10 @@ module BeautifulPhotons
       assert gallery.valid?
     end
 
-    test "invalid without name" do
+    test "auto-generates name from title when blank" do
       gallery = Gallery.new(title: "Homepage Hero")
-      assert_not gallery.valid?
-      assert_includes gallery.errors[:name], "can't be blank"
+      gallery.valid?
+      assert_equal "homepage_hero", gallery.name
     end
 
     test "invalid without title" do

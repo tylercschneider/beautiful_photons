@@ -5,5 +5,13 @@ module BeautifulPhotons
 
     validates :name, presence: true, uniqueness: true
     validates :title, presence: true
+
+    before_validation :generate_name, if: -> { name.blank? && title.present? }
+
+    private
+
+    def generate_name
+      self.name = title.parameterize(separator: "_")
+    end
   end
 end
