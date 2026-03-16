@@ -233,6 +233,47 @@ Block API: call `header.action { ... }` to add a custom action slot (e.g. a butt
 | `min:` | no | `nil` | — |
 | `max:` | no | `nil` | — |
 
+### `ui_form`
+
+Wraps content in a `<form>` tag with proper method handling. For non-GET/POST methods, renders a hidden `_method` input (Rails convention). Supports multipart for file uploads.
+
+```erb
+<%= ui_form(action: items_path) do %>
+  <%= ui_form_field(attribute: :name, required: true) %>
+  <%= ui_button(label: "Save", type: :submit) %>
+<% end %>
+
+<%= ui_form(action: item_path(@item), method: :patch, multipart: true) do %>
+  <%= ui_form_field(attribute: :name) %>
+  <%= ui_file_upload(name: "item[photo]", accept: "image/*") %>
+  <%= ui_button(label: "Save", type: :submit) %>
+<% end %>
+```
+
+| Param | Required | Default | Values |
+|-------|----------|---------|--------|
+| `action:` | yes | — | — |
+| `method:` | no | `:post` | `:get`, `:post`, `:patch`, `:put`, `:delete` |
+| `multipart:` | no | `false` | `true` for file uploads |
+| `data:` | no | `nil` | hash of data attributes |
+
+### `ui_file_upload`
+
+Styled file upload with drop zone, label, and optional hint.
+
+```erb
+<%= ui_file_upload(name: "avatar", accept: "image/*", hint: "PNG or JPG, max 5MB") %>
+<%= ui_file_upload(name: "documents[]", multiple: true, label: "Upload documents") %>
+```
+
+| Param | Required | Default |
+|-------|----------|---------|
+| `name:` | yes | — |
+| `label:` | no | `"Choose file"` |
+| `accept:` | no | `nil` | accepted file types (e.g. `"image/*"`, `".pdf,.doc"`) |
+| `multiple:` | no | `false` | allow multiple files |
+| `hint:` | no | `nil` | help text below drop zone |
+
 ### `ui_form_page`
 
 Wraps a form page with title and back navigation. Sets `content_for` signals so the navbar can render mobile header context.

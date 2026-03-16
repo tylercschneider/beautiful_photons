@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/tylercschneider/keystone_ui.git
-  revision: 2439857ba9c298cd7e78b231020d2319fceca89e
+  revision: 695e7c2eb1a748dd21a014d0172255b2b9d671da
   specs:
     keystone_ui (0.4.1)
       view_component (>= 2.0)
@@ -9,6 +9,7 @@ PATH
   remote: .
   specs:
     beautiful_photons (0.1.0)
+      keystone_ui
       rails (>= 8.1.2)
 
 GEM
