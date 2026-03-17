@@ -46,6 +46,17 @@ module BeautifulPhotons
         assert_equal photo.id, standalone.reload.photo_id
       end
 
+      test "GET /standalones/:id shows crop editor when aspect is set" do
+        photo = create_photo
+        standalone = BeautifulPhotons::Standalone.create!(key: "hero", photo: photo, aspect: "2:1")
+
+        get standalone_url(standalone)
+
+        assert_response :ok
+        assert_select "[data-controller='crop-editor']"
+        assert_select "input[name='standalone[crop_x]']"
+      end
+
       test "PATCH /standalones/:id saves crop data" do
         standalone = BeautifulPhotons::Standalone.create!(key: "hero")
         photo = create_photo
