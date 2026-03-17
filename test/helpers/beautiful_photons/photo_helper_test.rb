@@ -59,6 +59,14 @@ module BeautifulPhotons
       assert_equal @photo, photos.first
     end
 
+    test "beautiful_photons_photo renders standalone photo by key" do
+      Standalone.create!(key: "about_hero", photo: @photo)
+      html = beautiful_photons_photo("about_hero")
+
+      assert_includes html, "<img"
+      assert_includes html, "object-position: 60.0% 30.0%"
+    end
+
     test "beautiful_photons_photos filters by category" do
       gallery = Gallery.create!(name: "filtered_gallery", title: "Filtered")
       photo2 = create_photo("Other")
