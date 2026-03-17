@@ -75,6 +75,15 @@ module BeautifulPhotons
       assert_includes html, "<svg"
     end
 
+    test "beautiful_photons_photo auto-registers unknown key" do
+      assert_nil Standalone.find_by(key: "new_slot")
+      beautiful_photons_photo("new_slot")
+
+      standalone = Standalone.find_by(key: "new_slot")
+      assert_not_nil standalone
+      assert_equal "New slot", standalone.label
+    end
+
     test "beautiful_photons_photos filters by category" do
       gallery = Gallery.create!(name: "filtered_gallery", title: "Filtered")
       photo2 = create_photo("Other")
