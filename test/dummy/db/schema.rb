@@ -64,6 +64,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_13_003807) do
     t.string "key", null: false
     t.string "label"
     t.bigint "photo_id"
+    t.string "aspect"
+    t.string "mobile_aspect"
+    t.decimal "crop_x", default: "50.0", null: false
+    t.decimal "crop_y", default: "50.0", null: false
+    t.decimal "crop_zoom", default: "1.0", null: false
+    t.decimal "mobile_crop_x", default: "50.0", null: false
+    t.decimal "mobile_crop_y", default: "50.0", null: false
+    t.decimal "mobile_crop_zoom", default: "1.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index [ "key" ], name: "index_beautiful_photons_standalones_on_key", unique: true

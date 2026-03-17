@@ -23,16 +23,31 @@ module BeautifulPhotons
     end
 
     def beautiful_photons_photo(key, **options, &block)
+      aspect = options.delete(:aspect)
+      mobile_aspect = options.delete(:mobile_aspect)
+
       standalone = Standalone.find_or_create_by!(key: key.to_s)
+      if aspect && (standalone.aspect != aspect || standalone.mobile_aspect != mobile_aspect)
+        standalone.update!(aspect: aspect, mobile_aspect: mobile_aspect)
+      end
+
       return beautiful_photons_placeholder(**options, &block) unless standalone.photo
 
       cache_key = [ "bp/photo", standalone.cache_key_with_version, standalone.photo.cache_key_with_version ]
       rendered = Rails.cache.fetch(cache_key) do
         photo = standalone.photo
+        crop_style = "object-position: #{standalone.crop_x.to_f}% #{standalone.crop_y.to_f}%"
+        crop_style += "; transform: scale(#{standalone.crop_zoom.to_f})" if standalone.crop_zoom.to_f != 1.0
+
         img = beautiful_photons_image(photo, **options.merge(
-          style: [ options[:style], "opacity: 0; transition: opacity 0.3s" ].compact.join("; "),
+          style: [ options[:style], crop_style, "opacity: 0; transition: opacity 0.3s" ].compact.join("; "),
           onload: "this.style.opacity=1;this.previousElementSibling.style.display='none'",
-          onerror: "this.style.display='none';this.parentElement.querySelector('.bp-fallback').style.display='flex'"
+          onerror: "this.style.display='none';this.parentElement.querySelector('.bp-fallback').style.display='flex'",
+          data: (options[:data] || {}).merge(
+            mobile_crop_x: standalone.mobile_crop_x.to_f,
+            mobile_crop_y: standalone.mobile_crop_y.to_f,
+            mobile_crop_zoom: standalone.mobile_crop_zoom.to_f
+          )
         ))
 
         fallback = beautiful_photons_placeholder(**options.merge(class: [ options[:class], "bp-fallback" ].compact.join(" ")),

@@ -1,0 +1,12 @@
+class AddCropToBeautifulPhotonsStandalones < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def change
+    add_column :beautiful_photons_standalones, :aspect, :string
+    add_column :beautiful_photons_standalones, :mobile_aspect, :string
+    add_column :beautiful_photons_standalones, :crop_x, :decimal, default: 50.0, null: false
+    add_column :beautiful_photons_standalones, :crop_y, :decimal, default: 50.0, null: false
+    add_column :beautiful_photons_standalones, :crop_zoom, :decimal, default: 1.0, null: false
+    add_column :beautiful_photons_standalones, :mobile_crop_x, :decimal, default: 50.0, null: false
+    add_column :beautiful_photons_standalones, :mobile_crop_y, :decimal, default: 50.0, null: false
+    add_column :beautiful_photons_standalones, :mobile_crop_zoom, :decimal, default: 1.0, null: false
+  end
+end
