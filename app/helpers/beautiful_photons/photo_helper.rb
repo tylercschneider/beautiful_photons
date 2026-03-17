@@ -26,20 +26,24 @@ module BeautifulPhotons
       standalone = Standalone.find_or_create_by!(key: key.to_s)
       return beautiful_photons_placeholder(**options, &block) unless standalone.photo
 
-      photo = standalone.photo
-      img = beautiful_photons_image(photo, **options.merge(
-        style: [ options[:style], "opacity: 0; transition: opacity 0.3s" ].compact.join("; "),
-        onload: "this.style.opacity=1;this.previousElementSibling.style.display='none'",
-        onerror: "this.style.display='none';this.parentElement.querySelector('.bp-fallback').style.display='flex'"
-      ))
+      cache_key = [ "bp/photo", standalone.cache_key_with_version, standalone.photo.cache_key_with_version ]
+      rendered = Rails.cache.fetch(cache_key) do
+        photo = standalone.photo
+        img = beautiful_photons_image(photo, **options.merge(
+          style: [ options[:style], "opacity: 0; transition: opacity 0.3s" ].compact.join("; "),
+          onload: "this.style.opacity=1;this.previousElementSibling.style.display='none'",
+          onerror: "this.style.display='none';this.parentElement.querySelector('.bp-fallback').style.display='flex'"
+        ))
 
-      fallback = beautiful_photons_placeholder(**options.merge(class: [ options[:class], "bp-fallback" ].compact.join(" ")),
-        &block)
+        fallback = beautiful_photons_placeholder(**options.merge(class: [ options[:class], "bp-fallback" ].compact.join(" ")),
+          &block)
 
-      beautiful_photons_inline_styles +
         content_tag(:div, class: "bp-photo", style: "position: relative; width: 100%; height: 100%;") do
           beautiful_photons_loader + img + content_tag(:div, fallback, style: "display: none; position: absolute; inset: 0;")
         end
+      end
+
+      beautiful_photons_inline_styles + rendered
     end
 
     def beautiful_photons_inline_styles
