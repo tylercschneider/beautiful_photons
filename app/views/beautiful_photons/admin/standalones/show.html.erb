@@ -28,7 +28,7 @@
               data: { crop_editor_target: "image" } %>
             <div data-crop-editor-target="viewport"
                  data-action="mousedown->crop-editor#startDrag touchstart->crop-editor#startDrag"
-                 style="position: absolute; border: 2px solid rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); cursor: grab;">
+                 style="position: absolute; border: 2px solid rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); cursor: grab; display: none;">
             </div>
             <input type="hidden" name="standalone[crop_x]" value="<%= @standalone.crop_x %>" data-crop-editor-target="cropX">
             <input type="hidden" name="standalone[crop_y]" value="<%= @standalone.crop_y %>" data-crop-editor-target="cropY">
@@ -47,7 +47,7 @@
                 data: { crop_editor_target: "image" } %>
               <div data-crop-editor-target="viewport"
                    data-action="mousedown->crop-editor#startDrag touchstart->crop-editor#startDrag"
-                   style="position: absolute; border: 2px solid rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); cursor: grab;">
+                   style="position: absolute; border: 2px solid rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); cursor: grab; display: none;">
               </div>
               <input type="hidden" name="standalone[mobile_crop_x]" value="<%= @standalone.mobile_crop_x %>" data-crop-editor-target="cropX">
               <input type="hidden" name="standalone[mobile_crop_y]" value="<%= @standalone.mobile_crop_y %>" data-crop-editor-target="cropY">
