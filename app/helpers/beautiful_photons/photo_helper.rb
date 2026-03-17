@@ -18,6 +18,7 @@ module BeautifulPhotons
         )
       end
 
+      options[:alt] ||= photo.title
       image_tag(url_for(photo.image), **options.merge(style: style))
     end
 

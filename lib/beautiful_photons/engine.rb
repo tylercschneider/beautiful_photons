@@ -7,5 +7,12 @@ module BeautifulPhotons
         helper Rails.application.routes.url_helpers
       end
     end
+
+    initializer "beautiful_photons.view_helpers" do
+      ActiveSupport.on_load(:action_view) do
+        require_relative "../../app/helpers/beautiful_photons/photo_helper"
+        include BeautifulPhotons::PhotoHelper
+      end
+    end
   end
 end
