@@ -23,7 +23,14 @@ module BeautifulPhotons
     end
 
     def beautiful_photons_photo(key, **options, &block)
+      aspect = options.delete(:aspect)
+      mobile_aspect = options.delete(:mobile_aspect)
+
       standalone = Standalone.find_or_create_by!(key: key.to_s)
+      if aspect && (standalone.aspect != aspect || standalone.mobile_aspect != mobile_aspect)
+        standalone.update!(aspect: aspect, mobile_aspect: mobile_aspect)
+      end
+
       return beautiful_photons_placeholder(**options, &block) unless standalone.photo
 
       cache_key = [ "bp/photo", standalone.cache_key_with_version, standalone.photo.cache_key_with_version ]

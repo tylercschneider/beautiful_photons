@@ -76,6 +76,14 @@ module BeautifulPhotons
       assert_includes html, "onload"
     end
 
+    test "beautiful_photons_photo registers aspect ratios on standalone" do
+      beautiful_photons_photo("hero", aspect: "2:1", mobile_aspect: "9:16")
+
+      standalone = Standalone.find_by(key: "hero")
+      assert_equal "2:1", standalone.aspect
+      assert_equal "9:16", standalone.mobile_aspect
+    end
+
     test "beautiful_photons_photo renders placeholder when no photo assigned" do
       Standalone.create!(key: "empty_slot")
       html = beautiful_photons_photo("empty_slot")
