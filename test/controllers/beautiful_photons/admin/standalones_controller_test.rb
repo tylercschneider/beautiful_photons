@@ -46,6 +46,20 @@ module BeautifulPhotons
         assert_equal photo.id, standalone.reload.photo_id
       end
 
+      test "PATCH /standalones/:id saves crop data" do
+        standalone = BeautifulPhotons::Standalone.create!(key: "hero")
+        photo = create_photo
+
+        patch standalone_url(standalone), params: {
+          standalone: { photo_id: photo.id, crop_x: 30, crop_y: 70, crop_zoom: 1.5 }
+        }, as: :json
+
+        standalone.reload
+        assert_equal 30.0, standalone.crop_x.to_f
+        assert_equal 70.0, standalone.crop_y.to_f
+        assert_equal 1.5, standalone.crop_zoom.to_f
+      end
+
       private
 
       def create_photo(title: "Test Photo")
