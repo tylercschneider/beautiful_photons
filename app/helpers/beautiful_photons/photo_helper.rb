@@ -26,7 +26,41 @@ module BeautifulPhotons
       standalone = Standalone.find_or_create_by!(key: key.to_s)
       return beautiful_photons_placeholder(**options, &block) unless standalone.photo
 
-      beautiful_photons_image(standalone.photo, **options)
+      cache_key = [ "bp/photo", standalone.cache_key_with_version, standalone.photo.cache_key_with_version ]
+      rendered = Rails.cache.fetch(cache_key) do
+        photo = standalone.photo
+        img = beautiful_photons_image(photo, **options.merge(
+          style: [ options[:style], "opacity: 0; transition: opacity 0.3s" ].compact.join("; "),
+          onload: "this.style.opacity=1;this.previousElementSibling.style.display='none'",
+          onerror: "this.style.display='none';this.parentElement.querySelector('.bp-fallback').style.display='flex'"
+        ))
+
+        fallback = beautiful_photons_placeholder(**options.merge(class: [ options[:class], "bp-fallback" ].compact.join(" ")),
+          &block)
+
+        content_tag(:div, class: "bp-photo", style: "position: relative; width: 100%; height: 100%;") do
+          beautiful_photons_loader + img + content_tag(:div, fallback, style: "display: none; position: absolute; inset: 0;")
+        end
+      end
+
+      beautiful_photons_inline_styles + rendered
+    end
+
+    def beautiful_photons_inline_styles
+      return "".html_safe if @_bp_styles_rendered
+      @_bp_styles_rendered = true
+      content_tag(:style) { "@keyframes bp-spin { to { transform: rotate(360deg); } }".html_safe }
+    end
+
+    def beautiful_photons_loader
+      content_tag(:div, class: "bp-loader",
+        style: "position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #1a1a1a; z-index: 1; color: currentColor;") do
+        content_tag(:svg, viewBox: "0 0 24 24", style: "width: 33%; max-width: 48px; height: auto; animation: bp-spin 1s linear infinite;",
+          fill: "none", xmlns: "http://www.w3.org/2000/svg") do
+          tag(:circle, cx: "12", cy: "12", r: "10", stroke: "currentColor", "stroke-width": "2", opacity: "0.25") +
+            tag(:path, d: "M12 2a10 10 0 0 1 10 10", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round")
+        end
+      end
     end
 
     def beautiful_photons_placeholder(**options, &block)
