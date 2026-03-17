@@ -26,7 +26,11 @@ module BeautifulPhotons
       def show
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
         @gallery_photos = @gallery.gallery_photos.includes(:photo).order(:position)
-        existing_ids = @gallery_photos.map(&:photo_id)
+      end
+
+      def add_photos_page
+        @gallery = BeautifulPhotons::Gallery.find(params[:id])
+        existing_ids = @gallery.gallery_photos.pluck(:photo_id)
         @available_photos = BeautifulPhotons::Photo.where.not(id: existing_ids).order(created_at: :desc)
       end
 
@@ -54,9 +58,9 @@ module BeautifulPhotons
         redirect_to beautiful_photons.gallery_path(@gallery)
       end
 
-      def remove_photo
+      def remove_photos
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
-        @gallery.gallery_photos.where(photo_id: params[:photo_id]).destroy_all
+        @gallery.gallery_photos.where(photo_id: Array(params[:photo_ids])).destroy_all
         redirect_to beautiful_photons.gallery_path(@gallery)
       end
 

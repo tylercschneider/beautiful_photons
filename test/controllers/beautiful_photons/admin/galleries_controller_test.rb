@@ -60,16 +60,28 @@ module BeautifulPhotons
         assert_equal "Test Gallery", gallery.title
       end
 
-      test "DELETE /galleries/:id/remove_photo removes a photo from gallery" do
+      test "DELETE /galleries/:id/remove_photos bulk removes photos" do
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
-        photo = create_photo(title: "Remove Me")
-        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1)
+        photo_a = create_photo(title: "A")
+        photo_b = create_photo(title: "B")
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo_a, position: 1)
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo_b, position: 2)
 
-        assert_difference("BeautifulPhotons::GalleryPhoto.count", -1) do
-          delete remove_photo_gallery_url(gallery), params: { photo_id: photo.id }
+        assert_difference("BeautifulPhotons::GalleryPhoto.count", -2) do
+          delete remove_photos_gallery_url(gallery), params: { photo_ids: [ photo_a.id, photo_b.id ] }
         end
 
         assert_response :redirect
+      end
+
+      test "GET /galleries/:id/add_photos_page shows available photos" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        create_photo(title: "Available")
+
+        get add_photos_page_gallery_url(gallery)
+
+        assert_response :ok
+        assert_select "img[alt='Available']"
       end
 
       test "POST /galleries/:id/add_photos adds photos to gallery" do
