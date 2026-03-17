@@ -1,0 +1,38 @@
+<%= ui_show_page(title: @standalone.label, back_url: beautiful_photons.standalones_path) %>
+
+<%= ui_page(max_width: :lg) do %>
+  <% if @standalone.photo&.image&.attached? %>
+    <%= ui_section(title: "Current Photo") do %>
+      <div style="display: flex; align-items: flex-start; gap: 1rem;">
+        <%= image_tag main_app.url_for(@standalone.photo.image), alt: @standalone.photo.title, style: "max-width: 300px; border-radius: 4px;" %>
+        <div>
+          <strong><%= @standalone.photo.title || "Untitled" %></strong>
+          <%= ui_form(action: beautiful_photons.standalone_path(@standalone), method: :patch) do %>
+            <input type="hidden" name="standalone[photo_id]" value="">
+            <%= ui_button(label: "Remove", variant: :danger, size: :sm) %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= ui_section(title: "Assign Photo") do %>
+    <% if @photos.any? %>
+      <%= ui_grid(cols: { default: 3, sm: 4, lg: 5 }, gap: :sm) do %>
+        <% @photos.each do |photo| %>
+          <% if photo.image.attached? %>
+            <%= ui_form(action: beautiful_photons.standalone_path(@standalone), method: :patch) do %>
+              <input type="hidden" name="standalone[photo_id]" value="<%= photo.id %>">
+              <button type="submit" style="cursor: pointer; border: none; background: none; padding: 0; width: 100%;">
+                <% border_color = @standalone.photo_id == photo.id ? "#D4636D" : "transparent" %>
+                <%= image_tag main_app.url_for(photo.image), alt: photo.title, style: "width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; border: 2px solid #{border_color};" %>
+              </button>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p>No photos uploaded yet.</p>
+    <% end %>
+  <% end %>
+<% end %>

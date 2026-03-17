@@ -21,6 +21,16 @@ module BeautifulPhotons
         assert_select "strong", "About Hero"
       end
 
+      test "GET /standalones/:id shows standalone with available photos" do
+        standalone = BeautifulPhotons::Standalone.create!(key: "about_hero")
+        create_photo(title: "Available Photo")
+
+        get standalone_url(standalone)
+
+        assert_response :ok
+        assert_select "img[alt='Available Photo']"
+      end
+
       private
 
       def create_photo(title: "Test Photo")
