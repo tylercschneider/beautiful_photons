@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["checkbox", "removeButton"]
+  static targets = ["checkbox", "removeButton", "modal", "modalMessage", "form"]
 
   connect() {
     this.updateButton()
@@ -19,14 +19,27 @@ export default class extends Controller {
     btn.style.pointerEvents = count === 0 ? "none" : "auto"
   }
 
-  confirmRemove(event) {
+  showConfirm(event) {
+    event.preventDefault()
     const count = this.selectedCount
-    if (count === 0) {
-      event.preventDefault()
-      return
-    }
-    if (!confirm(`Remove ${count} photo${count === 1 ? "" : "s"} from this gallery?`)) {
-      event.preventDefault()
+    if (count === 0) return
+
+    this.modalMessageTarget.textContent = `Remove ${count} photo${count === 1 ? "" : "s"} from this gallery?`
+    this.modalTarget.classList.remove("hidden")
+  }
+
+  confirmRemove() {
+    this.modalTarget.classList.add("hidden")
+    this.formTarget.requestSubmit()
+  }
+
+  cancelRemove() {
+    this.modalTarget.classList.add("hidden")
+  }
+
+  closeOnBackdrop(event) {
+    if (event.target === this.modalTarget) {
+      this.cancelRemove()
     }
   }
 
