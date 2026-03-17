@@ -8,8 +8,16 @@
   <%= ui_grid(cols: { default: 2, sm: 3, lg: 4 }, gap: :md) do %>
     <% @photos.each do |photo| %>
       <% if photo.image.attached? %>
-        <%= link_to beautiful_photons.photo_path(photo) do %>
-          <%= image_tag main_app.url_for(photo.image), alt: photo.title, style: "width: 100%; aspect-ratio: 1; object-fit: cover;" %>
+        <% cache photo do %>
+          <%= link_to beautiful_photons.photo_path(photo), style: "display: block;" do %>
+            <div style="aspect-ratio: 1; background: #1a1a1a; border-radius: 4px; overflow: hidden;">
+              <%= image_tag main_app.url_for(photo.image), alt: photo.title,
+                loading: "lazy",
+                style: "width: 100%; height: 100%; object-fit: cover;",
+                onload: "this.style.opacity=1",
+                onerror: "this.style.display='none'" %>
+            </div>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
