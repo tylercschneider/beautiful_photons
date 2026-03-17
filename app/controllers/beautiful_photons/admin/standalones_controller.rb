@@ -12,9 +12,19 @@ module BeautifulPhotons
 
       def update
         @standalone = Standalone.find(params[:id])
-        photo_id = params[:standalone][:photo_id].presence
-        @standalone.update!(photo_id: photo_id)
+        @standalone.update!(standalone_params)
         redirect_to standalone_path(@standalone)
+      end
+
+      private
+
+      def standalone_params
+        permitted = params.require(:standalone).permit(
+          :photo_id, :crop_x, :crop_y, :crop_zoom,
+          :mobile_crop_x, :mobile_crop_y, :mobile_crop_zoom
+        )
+        permitted[:photo_id] = permitted[:photo_id].presence
+        permitted
       end
     end
   end

@@ -3,8 +3,8 @@
 <%= ui_page(max_width: :lg) do %>
   <% if @standalone.photo&.image&.attached? %>
     <%= ui_section(title: "Current Photo") do %>
-      <div style="display: flex; align-items: flex-start; gap: 1rem;">
-        <%= image_tag main_app.url_for(@standalone.photo.image), alt: @standalone.photo.title, style: "max-width: 300px; border-radius: 4px;" %>
+      <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+        <%= image_tag main_app.url_for(@standalone.photo.image), alt: @standalone.photo.title, style: "max-width: 200px; border-radius: 4px;" %>
         <div>
           <strong><%= @standalone.photo.title || "Untitled" %></strong>
           <%= ui_form(action: beautiful_photons.standalone_path(@standalone), method: :patch) do %>
@@ -13,6 +13,52 @@
           <% end %>
         </div>
       </div>
+    <% end %>
+
+    <% if @standalone.aspect.present? %>
+      <%= ui_form(action: beautiful_photons.standalone_path(@standalone), method: :patch) do %>
+        <input type="hidden" name="standalone[photo_id]" value="<%= @standalone.photo_id %>">
+
+        <%= ui_section(title: "Desktop Crop (#{@standalone.aspect})") do %>
+          <div data-controller="crop-editor" data-crop-editor-aspect-value="<%= @standalone.aspect %>"
+               style="position: relative; display: inline-block; cursor: grab; user-select: none;"
+               data-action="wheel->crop-editor#zoom">
+            <%= image_tag main_app.url_for(@standalone.photo.image), alt: @standalone.photo.title,
+              style: "width: 100%; display: block;",
+              data: { crop_editor_target: "image" } %>
+            <div data-crop-editor-target="viewport"
+                 data-action="mousedown->crop-editor#startDrag touchstart->crop-editor#startDrag"
+                 style="position: absolute; border: 2px solid rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); cursor: grab;">
+            </div>
+            <input type="hidden" name="standalone[crop_x]" value="<%= @standalone.crop_x %>" data-crop-editor-target="cropX">
+            <input type="hidden" name="standalone[crop_y]" value="<%= @standalone.crop_y %>" data-crop-editor-target="cropY">
+            <input type="hidden" name="standalone[crop_zoom]" value="<%= @standalone.crop_zoom %>" data-crop-editor-target="cropZoom">
+          </div>
+          <p style="color: #6b7280; font-size: 0.75rem; margin-top: 0.5rem;">Drag to position. Scroll to zoom.</p>
+        <% end %>
+
+        <% if @standalone.mobile_aspect.present? %>
+          <%= ui_section(title: "Mobile Crop (#{@standalone.mobile_aspect})") do %>
+            <div data-controller="crop-editor" data-crop-editor-aspect-value="<%= @standalone.mobile_aspect %>"
+                 style="position: relative; display: inline-block; cursor: grab; user-select: none;"
+                 data-action="wheel->crop-editor#zoom">
+              <%= image_tag main_app.url_for(@standalone.photo.image), alt: @standalone.photo.title,
+                style: "width: 100%; display: block;",
+                data: { crop_editor_target: "image" } %>
+              <div data-crop-editor-target="viewport"
+                   data-action="mousedown->crop-editor#startDrag touchstart->crop-editor#startDrag"
+                   style="position: absolute; border: 2px solid rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); cursor: grab;">
+              </div>
+              <input type="hidden" name="standalone[mobile_crop_x]" value="<%= @standalone.mobile_crop_x %>" data-crop-editor-target="cropX">
+              <input type="hidden" name="standalone[mobile_crop_y]" value="<%= @standalone.mobile_crop_y %>" data-crop-editor-target="cropY">
+              <input type="hidden" name="standalone[mobile_crop_zoom]" value="<%= @standalone.mobile_crop_zoom %>" data-crop-editor-target="cropZoom">
+            </div>
+            <p style="color: #6b7280; font-size: 0.75rem; margin-top: 0.5rem;">Drag to position. Scroll to zoom.</p>
+          <% end %>
+        <% end %>
+
+        <%= ui_button(label: "Save Crop") %>
+      <% end %>
     <% end %>
   <% end %>
 
