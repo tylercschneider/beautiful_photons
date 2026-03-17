@@ -17,6 +17,8 @@ module BeautifulPhotons
         migration_template "create_beautiful_photons_galleries.rb.tt", "db/migrate/create_beautiful_photons_galleries.rb"
         migration_template "create_beautiful_photons_gallery_photos.rb.tt",
                            "db/migrate/create_beautiful_photons_gallery_photos.rb"
+        migration_template "create_beautiful_photons_standalones.rb.tt",
+                           "db/migrate/create_beautiful_photons_standalones.rb"
       end
 
       def mount_engine

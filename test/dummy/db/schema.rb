@@ -60,6 +60,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_13_003807) do
     t.index [ "photo_id" ], name: "index_beautiful_photons_gallery_photos_on_photo_id"
   end
 
+  create_table "beautiful_photons_standalones", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "label"
+    t.bigint "photo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index [ "key" ], name: "index_beautiful_photons_standalones_on_key", unique: true
+    t.index [ "photo_id" ], name: "index_beautiful_photons_standalones_on_photo_id"
+  end
+
   create_table "beautiful_photons_photos", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
