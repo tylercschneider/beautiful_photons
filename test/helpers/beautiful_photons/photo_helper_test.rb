@@ -76,6 +76,14 @@ module BeautifulPhotons
       assert_includes html, "onload"
     end
 
+    test "beautiful_photons_photo applies crop data to image" do
+      standalone = Standalone.create!(key: "cropped", photo: @photo, crop_x: 30, crop_y: 70, crop_zoom: 1.5)
+      html = beautiful_photons_photo("cropped")
+
+      assert_includes html, "object-position: 30.0% 70.0%"
+      assert_includes html, "scale(1.5)"
+    end
+
     test "beautiful_photons_photo registers aspect ratios on standalone" do
       beautiful_photons_photo("hero", aspect: "2:1", mobile_aspect: "9:16")
 
