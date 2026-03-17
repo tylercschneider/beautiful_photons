@@ -31,6 +31,11 @@ module BeautifulPhotons
         assert_select "img[alt='Available Photo']"
       end
 
+      test "standalones index has nav link" do
+        get standalones_url
+        assert_select "a", "Standalones"
+      end
+
       test "PATCH /standalones/:id assigns a photo" do
         standalone = BeautifulPhotons::Standalone.create!(key: "about_hero")
         photo = create_photo(title: "Assigned Photo")
