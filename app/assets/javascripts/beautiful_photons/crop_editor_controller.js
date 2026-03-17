@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["image", "viewport", "cropX", "cropY", "cropZoom"]
+  static targets = ["image", "viewport", "cropX", "cropY", "cropZoom", "zoomSlider"]
   static values = { aspect: String }
 
   connect() {
@@ -48,6 +48,10 @@ export default class extends Controller {
     vp.style.height = `${vpH}%`
     vp.style.left = `${this.clamp(left, 0, 100 - vpW)}%`
     vp.style.top = `${this.clamp(top, 0, 100 - vpH)}%`
+
+    if (this.hasZoomSliderTarget) {
+      this.zoomSliderTarget.value = zoom
+    }
   }
 
   startDrag(event) {
@@ -88,11 +92,8 @@ export default class extends Controller {
     this.updateViewport()
   }
 
-  zoom(event) {
-    event.preventDefault()
-    const currentZoom = parseFloat(this.cropZoomTarget.value)
-    const delta = event.deltaY > 0 ? -0.1 : 0.1
-    this.cropZoomTarget.value = this.clamp(currentZoom + delta, 1.0, 3.0).toFixed(2)
+  sliderZoom(event) {
+    this.cropZoomTarget.value = parseFloat(event.target.value).toFixed(2)
     this.updateViewport()
   }
 
