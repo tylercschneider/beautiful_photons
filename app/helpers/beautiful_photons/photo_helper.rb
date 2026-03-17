@@ -29,7 +29,7 @@ module BeautifulPhotons
     end
 
     def beautiful_photons_placeholder(**options)
-      css_class = ["bp-placeholder", options[:class]].compact.join(" ")
+      css_class = [ "bp-placeholder", options[:class] ].compact.join(" ")
       content_tag(:div, class: css_class) do
         content_tag(:svg, xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24",
           "stroke-width": "0.75", stroke: "currentColor", class: "bp-placeholder-icon") do
