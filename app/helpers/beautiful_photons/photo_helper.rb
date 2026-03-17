@@ -39,8 +39,11 @@ module BeautifulPhotons
         crop_style = "object-position: #{standalone.crop_x.to_f}% #{standalone.crop_y.to_f}%"
         crop_style += "; transform: scale(#{standalone.crop_zoom.to_f})" if standalone.crop_zoom.to_f != 1.0
 
-        img = beautiful_photons_image(photo, **options.merge(
-          style: [ options[:style], crop_style, "opacity: 0; transition: opacity 0.3s" ].compact.join("; "),
+        img_style = [ "width: 100%; height: 100%; object-fit: cover", crop_style, "opacity: 0; transition: opacity 0.3s" ].join("; ")
+
+        img = beautiful_photons_image(photo, **{
+          class: nil,
+          style: img_style,
           onload: "this.style.opacity=1;this.previousElementSibling.style.display='none'",
           onerror: "this.style.display='none';this.parentElement.querySelector('.bp-fallback').style.display='flex'",
           data: (options[:data] || {}).merge(
@@ -48,12 +51,13 @@ module BeautifulPhotons
             mobile_crop_y: standalone.mobile_crop_y.to_f,
             mobile_crop_zoom: standalone.mobile_crop_zoom.to_f
           )
-        ))
+        })
 
-        fallback = beautiful_photons_placeholder(**options.merge(class: [ options[:class], "bp-fallback" ].compact.join(" ")),
-          &block)
+        fallback = beautiful_photons_placeholder(class: "bp-fallback", &block)
 
-        content_tag(:div, class: "bp-photo", style: "position: relative; width: 100%; height: 100%;") do
+        wrapper_class = [ "bp-photo", options[:class] ].compact.join(" ")
+        content_tag(:div, class: wrapper_class,
+          style: "position: relative; overflow: hidden; #{options[:style]}") do
           beautiful_photons_loader + img + content_tag(:div, fallback, style: "display: none; position: absolute; inset: 0;")
         end
       end

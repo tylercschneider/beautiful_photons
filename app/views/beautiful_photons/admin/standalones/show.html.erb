@@ -21,9 +21,9 @@
 
     <% if @standalone.aspect.present? %>
       <%= ui_section(title: "Desktop Crop") do %>
-        <div style="max-width: 400px;">
+        <div style="max-width: 400px; overflow: hidden; border-radius: 4px;">
           <%= image_tag main_app.url_for(@standalone.photo.image), alt: "Desktop preview",
-            style: "width: 100%; aspect-ratio: #{@standalone.aspect.tr(':', '/')}; object-fit: cover; object-position: #{@standalone.crop_x}% #{@standalone.crop_y}%; border-radius: 4px; #{"transform: scale(#{@standalone.crop_zoom});" if @standalone.crop_zoom.to_f != 1.0}" %>
+            style: "width: 100%; aspect-ratio: #{@standalone.aspect.tr(':', '/')}; object-fit: cover; object-position: #{@standalone.crop_x}% #{@standalone.crop_y}%; #{"transform: scale(#{@standalone.crop_zoom});" if @standalone.crop_zoom.to_f != 1.0}" %>
         </div>
         <div style="margin-top: 0.75rem;">
           <%= ui_button(label: "Edit", href: beautiful_photons.edit_crop_standalone_path(@standalone), variant: :secondary, size: :sm) %>
@@ -32,9 +32,9 @@
 
       <% if @standalone.mobile_aspect.present? %>
         <%= ui_section(title: "Mobile Crop") do %>
-          <div style="max-width: 200px;">
+          <div style="max-width: 200px; overflow: hidden; border-radius: 4px;">
             <%= image_tag main_app.url_for(@standalone.photo.image), alt: "Mobile preview",
-              style: "width: 100%; aspect-ratio: #{@standalone.mobile_aspect.tr(':', '/')}; object-fit: cover; object-position: #{@standalone.mobile_crop_x}% #{@standalone.mobile_crop_y}%; border-radius: 4px; #{"transform: scale(#{@standalone.mobile_crop_zoom});" if @standalone.mobile_crop_zoom.to_f != 1.0}" %>
+              style: "width: 100%; aspect-ratio: #{@standalone.mobile_aspect.tr(':', '/')}; object-fit: cover; object-position: #{@standalone.mobile_crop_x}% #{@standalone.mobile_crop_y}%; #{"transform: scale(#{@standalone.mobile_crop_zoom});" if @standalone.mobile_crop_zoom.to_f != 1.0}" %>
           </div>
           <div style="margin-top: 0.75rem;">
             <%= ui_button(label: "Edit", href: beautiful_photons.edit_mobile_crop_standalone_path(@standalone), variant: :secondary, size: :sm) %>
