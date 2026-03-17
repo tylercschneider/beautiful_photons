@@ -9,6 +9,8 @@ load File.expand_path("dummy/db/schema.rb", __dir__)
 
 require "rails/test_help"
 
+ActionController::Base.allow_forgery_protection = false
+
 class ActiveSupport::TestCase
   self.use_transactional_tests = true
   self.file_fixture_path = File.expand_path("fixtures/files", __dir__)

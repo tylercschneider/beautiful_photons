@@ -17,6 +17,20 @@
     <% end %>
   <% end %>
 
+  <%= ui_section(title: "Standalones") do %>
+    <% standalones = @photo.standalones %>
+    <% if standalones.any? %>
+      <% standalones.each do |standalone| %>
+        <div>
+          <%= link_to standalone.label, beautiful_photons.standalone_path(standalone) %>
+          <span style="color: #6b7280;">(<%= standalone.key %>)</span>
+        </div>
+      <% end %>
+    <% else %>
+      <p>Not used in any standalone placements</p>
+    <% end %>
+  <% end %>
+
   <%= ui_section(title: "Galleries") do %>
     <% gallery_photos = @photo.gallery_photos.includes(:gallery) %>
     <% if gallery_photos.any? %>

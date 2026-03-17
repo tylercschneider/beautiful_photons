@@ -1,6 +1,7 @@
 BeautifulPhotons::Engine.routes.draw do
   scope module: :admin do
     resources :photos, only: [ :index, :show, :new, :create, :edit, :update ]
+    resources :standalones, only: [ :index, :show, :update ]
     resources :galleries, only: [ :index, :show, :new, :create ] do
       patch :reorder, on: :member
       post :add_photos, on: :member

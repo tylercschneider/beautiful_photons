@@ -99,6 +99,16 @@ module BeautifulPhotons
         assert_match "Title", response.body
       end
 
+      test "GET /photos/:id shows standalone usage" do
+        photo = create_photo(title: "About Photo")
+        BeautifulPhotons::Standalone.create!(key: "about_hero", label: "About Hero", photo: photo)
+
+        get photo_url(photo)
+
+        assert_response :ok
+        assert_select "a", "About Hero"
+      end
+
       private
 
       def create_photo(title: "Test Photo")
