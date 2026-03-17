@@ -3,6 +3,7 @@ module BeautifulPhotons
     has_one_attached :image
     has_many :gallery_photos, dependent: :destroy
     has_many :galleries, through: :gallery_photos
+    has_many :standalones, dependent: :nullify
 
     validates :image, presence: true
     validates :focal_x, :focal_y, numericality: { in: 0..100 }
