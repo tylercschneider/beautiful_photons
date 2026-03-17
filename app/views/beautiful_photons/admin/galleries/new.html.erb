@@ -3,9 +3,13 @@
 <%= ui_page(max_width: :lg) do %>
   <%= ui_form(action: beautiful_photons.galleries_path, method: :post) do %>
     <%= ui_section do %>
-      <%= ui_input(name: "gallery[name]", placeholder: "machine_name (e.g. homepage_hero)") %>
-      <%= ui_input(name: "gallery[title]", placeholder: "Display Title") %>
-      <%= ui_textarea(name: "gallery[description]", placeholder: "Description (optional)") %>
+      <label class="block text-sm font-medium text-surface-700 mb-1">Title</label>
+      <%= ui_input(name: "gallery[title]", placeholder: "e.g. Backsplashes") %>
+    <% end %>
+
+    <%= ui_section do %>
+      <label class="block text-sm font-medium text-surface-700 mb-1">Description <span class="text-surface-400">(optional)</span></label>
+      <%= ui_textarea(name: "gallery[description]", placeholder: "Brief description for the public page") %>
     <% end %>
 
     <%= ui_button(label: "Create") %>
