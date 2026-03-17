@@ -2,6 +2,12 @@ module BeautifulPhotons
   class Engine < ::Rails::Engine
     isolate_namespace BeautifulPhotons
 
+    initializer "beautiful_photons.importmap", before: "importmap" do |app|
+      if app.config.respond_to?(:importmap)
+        app.config.importmap.paths << root.join("config/importmap.rb")
+      end
+    end
+
     initializer "beautiful_photons.url_helpers" do
       ActiveSupport.on_load(:action_controller) do
         helper Rails.application.routes.url_helpers

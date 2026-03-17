@@ -10,6 +10,7 @@ export default class extends Controller {
     this.dragStartY = 0
     this.startCropX = 0
     this.startCropY = 0
+    this.viewportTarget.style.display = "block"
     this.updateViewport()
   }
 
