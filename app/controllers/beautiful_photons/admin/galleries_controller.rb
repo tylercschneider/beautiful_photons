@@ -48,20 +48,25 @@ module BeautifulPhotons
       def add_photos
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
         max_position = @gallery.gallery_photos.maximum(:position) || 0
+        ids = Array(params[:photo_ids])
 
-        Array(params[:photo_ids]).each_with_index do |photo_id, index|
+        ids.each_with_index do |photo_id, index|
           @gallery.gallery_photos.find_or_create_by!(photo_id: photo_id) do |gp|
             gp.position = max_position + index + 1
           end
         end
 
-        redirect_to beautiful_photons.gallery_path(@gallery)
+        redirect_to beautiful_photons.gallery_path(@gallery),
+          notice: "Added #{ids.size} #{"photo".pluralize(ids.size)} to gallery."
       end
 
       def remove_photos
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
-        @gallery.gallery_photos.where(photo_id: Array(params[:photo_ids])).destroy_all
-        redirect_to beautiful_photons.gallery_path(@gallery)
+        ids = Array(params[:photo_ids])
+        @gallery.gallery_photos.where(photo_id: ids).destroy_all
+
+        redirect_to beautiful_photons.gallery_path(@gallery),
+          notice: "Removed #{ids.size} #{"photo".pluralize(ids.size)} from gallery."
       end
 
       private
