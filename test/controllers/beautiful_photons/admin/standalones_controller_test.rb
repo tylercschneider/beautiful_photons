@@ -31,6 +31,16 @@ module BeautifulPhotons
         assert_select "img[alt='Available Photo']"
       end
 
+      test "PATCH /standalones/:id assigns a photo" do
+        standalone = BeautifulPhotons::Standalone.create!(key: "about_hero")
+        photo = create_photo(title: "Assigned Photo")
+
+        patch standalone_url(standalone), params: { standalone: { photo_id: photo.id } }, as: :json
+
+        assert_redirected_to standalone_path(standalone)
+        assert_equal photo.id, standalone.reload.photo_id
+      end
+
       private
 
       def create_photo(title: "Test Photo")
