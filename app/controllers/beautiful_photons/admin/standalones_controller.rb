@@ -25,7 +25,18 @@ module BeautifulPhotons
       def update
         @standalone = Standalone.find(params[:id])
         @standalone.update!(standalone_params)
-        redirect_to standalone_path(@standalone)
+
+        message = if standalone_params.key?(:crop_x) || standalone_params.key?(:mobile_crop_x)
+          "Crop saved."
+        elsif standalone_params[:photo_id].present?
+          "Photo assigned."
+        elsif standalone_params.key?(:photo_id)
+          "Photo removed."
+        else
+          "Updated."
+        end
+
+        redirect_to standalone_path(@standalone), notice: message
       end
 
       private

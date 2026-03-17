@@ -9,9 +9,12 @@ BeautifulPhotons::Engine.routes.draw do
       end
     end
     resources :galleries, only: [ :index, :show, :new, :create ] do
-      patch :reorder, on: :member
-      post :add_photos, on: :member
-      delete :remove_photo, on: :member
+      member do
+        patch :reorder
+        get :add_photos_page
+        post :add_photos
+        delete :remove_photos
+      end
     end
   end
 

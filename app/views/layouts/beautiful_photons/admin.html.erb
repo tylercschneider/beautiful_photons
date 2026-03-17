@@ -20,6 +20,16 @@
   </nav>
 
   <main style="padding: 1rem;">
+    <% if flash[:notice] %>
+      <div style="background: #065f46; color: #d1fae5; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.875rem;">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div style="background: #991b1b; color: #fecaca; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.875rem;">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
     <%= yield %>
   </main>
 </body>

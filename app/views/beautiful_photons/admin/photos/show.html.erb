@@ -2,19 +2,22 @@
 
 <%= ui_page(max_width: :lg) do %>
   <%= ui_section do %>
-    <% if @photo.image.attached? %>
-      <%= image_tag main_app.url_for(@photo.image), alt: @photo.title, style: "width: 100%; object-fit: cover;" %>
-    <% end %>
-  <% end %>
-
-  <%= ui_section do %>
-    <%= ui_button(label: "Edit", href: beautiful_photons.edit_photo_path(@photo), variant: :secondary, size: :sm) %>
-  <% end %>
-
-  <% if @photo.description.present? %>
-    <%= ui_section(title: "Description") do %>
-      <p><%= @photo.description %></p>
-    <% end %>
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start;">
+      <% if @photo.image.attached? %>
+        <div style="width: 300px; flex-shrink: 0;">
+          <%= image_tag main_app.url_for(@photo.image), alt: @photo.title,
+            style: "width: 100%; border-radius: 4px; object-fit: cover;" %>
+        </div>
+      <% end %>
+      <div style="flex: 1; min-width: 200px;">
+        <% if @photo.description.present? %>
+          <p style="color: #6b7280; margin-bottom: 1rem;"><%= @photo.description %></p>
+        <% end %>
+        <div style="margin-bottom: 0.5rem;">
+          <%= ui_button(label: "Edit", href: beautiful_photons.edit_photo_path(@photo), variant: :secondary, size: :sm) %>
+        </div>
+      </div>
+    </div>
   <% end %>
 
   <%= ui_section(title: "Standalones") do %>
