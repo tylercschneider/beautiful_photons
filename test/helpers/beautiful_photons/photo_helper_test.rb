@@ -75,6 +75,15 @@ module BeautifulPhotons
       assert_includes html, "<svg"
     end
 
+    test "beautiful_photons_photo renders custom block as placeholder" do
+      Standalone.create!(key: "custom_slot")
+      html = beautiful_photons_photo("custom_slot") { "<span class='custom-icon'>icon</span>".html_safe }
+
+      assert_includes html, "bp-placeholder"
+      assert_includes html, "custom-icon"
+      assert_not_includes html, "<svg"
+    end
+
     test "beautiful_photons_photo auto-registers unknown key" do
       assert_nil Standalone.find_by(key: "new_slot")
       beautiful_photons_photo("new_slot")
