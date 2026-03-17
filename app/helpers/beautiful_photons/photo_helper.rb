@@ -32,7 +32,7 @@ module BeautifulPhotons
     def beautiful_photons_placeholder(**options, &block)
       css_class = [ "bp-placeholder", options[:class] ].compact.join(" ")
       content_tag(:div, class: css_class,
-        style: "display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: currentColor;") do
+        style: "display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: currentColor; width: 100%; height: 100%; overflow: hidden;") do
         if block
           capture(&block)
         else
