@@ -7,6 +7,18 @@ module BeautifulPhotons
 
       def show
         @standalone = Standalone.find(params[:id])
+      end
+
+      def edit_crop
+        @standalone = Standalone.find(params[:id])
+      end
+
+      def edit_mobile_crop
+        @standalone = Standalone.find(params[:id])
+      end
+
+      def change_photo
+        @standalone = Standalone.find(params[:id])
         @photos = Photo.all.order(created_at: :desc)
       end
 

@@ -21,11 +21,21 @@ module BeautifulPhotons
         assert_select "strong", "About Hero"
       end
 
-      test "GET /standalones/:id shows standalone with available photos" do
+      test "GET /standalones/:id shows standalone summary" do
+        photo = create_photo(title: "My Photo")
+        standalone = BeautifulPhotons::Standalone.create!(key: "about_hero", photo: photo)
+
+        get standalone_url(standalone)
+
+        assert_response :ok
+        assert_select "strong", "My Photo"
+      end
+
+      test "GET /standalones/:id/change_photo shows photo grid" do
         standalone = BeautifulPhotons::Standalone.create!(key: "about_hero")
         create_photo(title: "Available Photo")
 
-        get standalone_url(standalone)
+        get change_photo_standalone_url(standalone)
 
         assert_response :ok
         assert_select "img[alt='Available Photo']"
@@ -46,15 +56,16 @@ module BeautifulPhotons
         assert_equal photo.id, standalone.reload.photo_id
       end
 
-      test "GET /standalones/:id shows crop editor when aspect is set" do
+      test "GET /standalones/:id/edit_crop shows crop editor" do
         photo = create_photo
         standalone = BeautifulPhotons::Standalone.create!(key: "hero", photo: photo, aspect: "2:1")
 
-        get standalone_url(standalone)
+        get edit_crop_standalone_url(standalone)
 
         assert_response :ok
         assert_select "[data-controller='crop-editor']"
         assert_select "input[name='standalone[crop_x]']"
+        assert_select "input[type='range']"
       end
 
       test "PATCH /standalones/:id saves crop data" do
