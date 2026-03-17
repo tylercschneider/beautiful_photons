@@ -33,45 +33,21 @@ module BeautifulPhotons
 
       return beautiful_photons_placeholder(**options, &block) unless standalone.photo
 
-      cache_key = [ "bp/photo", standalone.cache_key_with_version, standalone.photo.cache_key_with_version ]
-      rendered = Rails.cache.fetch(cache_key) do
-        photo = standalone.photo
-        crop_style = "object-position: #{standalone.crop_x.to_f}% #{standalone.crop_y.to_f}%"
-        crop_style += "; transform: scale(#{standalone.crop_zoom.to_f})" if standalone.crop_zoom.to_f != 1.0
+      frame_id = "bp-photo-#{standalone.key}"
+      frame_src = beautiful_photons.standalone_photo_path(standalone.key)
 
-        img_style = [ "width: 100%; height: 100%; object-fit: cover", crop_style, "opacity: 0; transition: opacity 0.3s" ].join("; ")
+      fallback = beautiful_photons_placeholder(class: "bp-fallback", &block)
 
-        img_id = "bp-img-#{standalone.id}"
-        img = beautiful_photons_image(photo, **{
-          id: img_id,
-          class: nil,
-          style: img_style,
-          onload: "this.style.opacity=1;this.previousElementSibling.style.display='none'",
-          onerror: "this.style.display='none';this.parentElement.querySelector('.bp-fallback').style.display='flex'"
-        })
+      wrapper_class = [ "bp-photo", options[:class] ].compact.join(" ")
+      wrapper_style = [ "overflow: hidden", options[:style] ].compact.join("; ")
 
-        mobile_css = "".html_safe
-        if standalone.mobile_crop_x != standalone.crop_x ||
-           standalone.mobile_crop_y != standalone.crop_y ||
-           standalone.mobile_crop_zoom != standalone.crop_zoom
-          mobile_position = "#{standalone.mobile_crop_x.to_f}% #{standalone.mobile_crop_y.to_f}%"
-          mobile_transform = standalone.mobile_crop_zoom.to_f != 1.0 ? "scale(#{standalone.mobile_crop_zoom.to_f})" : "none"
-          mobile_css = content_tag(:style) do
-            "@media (max-width: 768px) { ##{img_id} { object-position: #{mobile_position} !important; transform: #{mobile_transform} !important; } }".html_safe
-          end
+      beautiful_photons_inline_styles +
+        content_tag(:div, class: wrapper_class, style: wrapper_style) do
+          turbo_frame_tag(frame_id, src: frame_src, loading: "lazy") do
+            beautiful_photons_loader
+          end +
+            content_tag(:div, fallback, class: "bp-fallback-wrap", style: "display: none; position: absolute; inset: 0;")
         end
-
-        fallback = beautiful_photons_placeholder(class: "bp-fallback", &block)
-
-        wrapper_class = [ "bp-photo", options[:class] ].compact.join(" ")
-        wrapper_style = [ "overflow: hidden", options[:style] ].compact.join("; ")
-        mobile_css +
-          content_tag(:div, class: wrapper_class, style: wrapper_style) do
-            beautiful_photons_loader + img + content_tag(:div, fallback, style: "display: none; position: absolute; inset: 0;")
-          end
-      end
-
-      beautiful_photons_inline_styles + rendered
     end
 
     def beautiful_photons_inline_styles

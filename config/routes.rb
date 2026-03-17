@@ -18,6 +18,9 @@ BeautifulPhotons::Engine.routes.draw do
     end
   end
 
+  # Public turbo frame endpoint for standalone photos
+  get "standalone_photo/:key", to: "standalone_photos#show", as: :standalone_photo
+
   namespace :api do
     namespace :v1 do
       resources :photos

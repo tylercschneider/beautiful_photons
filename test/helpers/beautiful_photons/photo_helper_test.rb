@@ -3,6 +3,11 @@ require "test_helper"
 module BeautifulPhotons
   class PhotoHelperTest < ActionView::TestCase
     include PhotoHelper
+    include Turbo::FramesHelper
+
+    def beautiful_photons
+      Engine.routes.url_helpers
+    end
 
     setup do
       @photo = Photo.new(title: "Test", focal_x: 60, focal_y: 30)
@@ -59,29 +64,23 @@ module BeautifulPhotons
       assert_equal @photo, photos.first
     end
 
-    test "beautiful_photons_photo renders standalone photo by key" do
+    test "beautiful_photons_photo renders turbo frame with loader" do
       Standalone.create!(key: "about_hero", photo: @photo)
       html = beautiful_photons_photo("about_hero")
 
-      assert_includes html, "<img"
-      assert_includes html, "object-position: 60.0% 30.0%"
-    end
-
-    test "beautiful_photons_photo wraps image with loading indicator" do
-      Standalone.create!(key: "loading_test", photo: @photo)
-      html = beautiful_photons_photo("loading_test")
-
       assert_includes html, "bp-photo"
+      assert_includes html, "turbo-frame"
+      assert_includes html, "bp-photo-about_hero"
       assert_includes html, "bp-loader"
-      assert_includes html, "onload"
+      assert_includes html, "loading=\"lazy\""
     end
 
-    test "beautiful_photons_photo applies crop data to image" do
-      standalone = Standalone.create!(key: "cropped", photo: @photo, crop_x: 30, crop_y: 70, crop_zoom: 1.5)
-      html = beautiful_photons_photo("cropped")
+    test "beautiful_photons_photo includes fallback outside turbo frame" do
+      Standalone.create!(key: "fallback_test", photo: @photo)
+      html = beautiful_photons_photo("fallback_test")
 
-      assert_includes html, "object-position: 30.0% 70.0%"
-      assert_includes html, "scale(1.5)"
+      assert_includes html, "bp-fallback-wrap"
+      assert_includes html, "bp-placeholder"
     end
 
     test "beautiful_photons_photo registers aspect ratios on standalone" do

@@ -1,3 +1,4 @@
+require "turbo-rails"
 require "beautiful_photons/version"
 require "beautiful_photons/engine"
 
