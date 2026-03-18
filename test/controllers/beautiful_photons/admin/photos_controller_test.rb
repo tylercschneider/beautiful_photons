@@ -95,8 +95,7 @@ module BeautifulPhotons
 
         assert_response :ok
         assert_select "form"
-        assert_match "photo[image]", response.body
-        assert_match "Title", response.body
+        assert_match "images[]", response.body
       end
 
       test "POST /photos/bulk_create uploads multiple photos" do
