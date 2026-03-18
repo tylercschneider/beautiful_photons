@@ -86,13 +86,13 @@ module BeautifulPhotons
 
     def beautiful_photons_gallery(gallery_name)
       gallery = Gallery.find_by!(name: gallery_name)
-      photos = gallery.gallery_photos.order(:position).map(&:photo)
+      photos = gallery.gallery_photos.joins(:photo).where(photo: { published: true }).order(:position).map(&:photo)
       photos.each { |photo| yield photo }
     end
 
     def beautiful_photons_photos(gallery_name, category: nil)
       gallery = Gallery.find_by!(name: gallery_name)
-      scope = gallery.gallery_photos.order(:position)
+      scope = gallery.gallery_photos.joins(:photo).where(photo: { published: true }).order(:position)
       scope = scope.where(category: category) if category
       scope.map(&:photo)
     end
