@@ -109,6 +109,66 @@ module BeautifulPhotons
         assert_equal "Uploaded 2 photos.", flash[:notice]
       end
 
+      test "DELETE /photos/:id destroys the photo and redirects" do
+        photo = create_photo(title: "To Delete")
+
+        assert_difference("BeautifulPhotons::Photo.count", -1) do
+          delete photo_url(photo)
+        end
+
+        assert_redirected_to photos_path
+        assert_equal "Photo deleted.", flash[:notice]
+      end
+
+      test "DELETE /photos/:id nullifies standalones and destroys gallery_photos" do
+        photo = create_photo(title: "Cascading")
+        standalone = BeautifulPhotons::Standalone.create!(key: "hero", label: "Hero", photo: photo)
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        gallery_photo = BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1)
+
+        delete photo_url(photo)
+
+        assert_nil standalone.reload.photo_id
+        assert_raises(ActiveRecord::RecordNotFound) { gallery_photo.reload }
+      end
+
+      test "GET /photos has bulk select checkboxes and delete button" do
+        photo = create_photo(title: "Selectable")
+
+        get photos_url
+
+        assert_response :ok
+        assert_select "[data-controller*='bulk-select']"
+        assert_select "input[type='checkbox'][name='photo_ids[]']"
+        assert_select "[data-bulk-select-target='removeButton']", "Delete Selected"
+      end
+
+      test "DELETE /photos/bulk_destroy deletes selected photos" do
+        photo1 = create_photo(title: "Delete Me")
+        photo2 = create_photo(title: "Delete Me Too")
+        photo3 = create_photo(title: "Keep Me")
+
+        assert_difference("BeautifulPhotons::Photo.count", -2) do
+          delete bulk_destroy_photos_url, params: { photo_ids: [ photo1.id, photo2.id ] }
+        end
+
+        assert_redirected_to photos_path
+        assert_equal "Deleted 2 photos.", flash[:notice]
+        assert BeautifulPhotons::Photo.exists?(photo3.id)
+      end
+
+      test "GET /photos/:id has a delete button" do
+        photo = create_photo(title: "Deletable")
+
+        get photo_url(photo)
+
+        assert_response :ok
+        assert_select "form[action='#{photo_path(photo)}'][method='post']" do
+          assert_select "input[name='_method'][value='delete']"
+          assert_select "button", "Delete"
+        end
+      end
+
       test "GET /photos/:id shows standalone usage" do
         photo = create_photo(title: "About Photo")
         BeautifulPhotons::Standalone.create!(key: "about_hero", label: "About Hero", photo: photo)

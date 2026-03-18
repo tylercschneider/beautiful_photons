@@ -52,6 +52,19 @@ module BeautifulPhotons
         redirect_to beautiful_photons.photo_path(@photo)
       end
 
+      def destroy
+        @photo = BeautifulPhotons::Photo.find(params[:id])
+        @photo.destroy!
+        redirect_to beautiful_photons.photos_path, notice: "Photo deleted."
+      end
+
+      def bulk_destroy
+        ids = Array(params[:photo_ids])
+        BeautifulPhotons::Photo.where(id: ids).destroy_all
+        redirect_to beautiful_photons.photos_path,
+          notice: "Deleted #{ids.size} #{"photo".pluralize(ids.size)}."
+      end
+
       private
 
       def photo_params
