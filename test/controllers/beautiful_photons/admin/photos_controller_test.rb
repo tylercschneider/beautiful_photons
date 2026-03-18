@@ -120,6 +120,18 @@ module BeautifulPhotons
         assert_equal "Photo deleted.", flash[:notice]
       end
 
+      test "GET /photos/:id has a delete button" do
+        photo = create_photo(title: "Deletable")
+
+        get photo_url(photo)
+
+        assert_response :ok
+        assert_select "form[action='#{photo_path(photo)}'][method='post']" do
+          assert_select "input[name='_method'][value='delete']"
+          assert_select "button", "Delete"
+        end
+      end
+
       test "GET /photos/:id shows standalone usage" do
         photo = create_photo(title: "About Photo")
         BeautifulPhotons::Standalone.create!(key: "about_hero", label: "About Hero", photo: photo)
