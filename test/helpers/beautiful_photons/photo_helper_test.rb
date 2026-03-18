@@ -45,6 +45,8 @@ module BeautifulPhotons
     test "beautiful_photons_gallery yields photos in position order" do
       gallery = Gallery.create!(name: "test_gallery", title: "Test")
       photo2 = create_photo("Second")
+      @photo.update!(published: true)
+      photo2.update!(published: true)
       GalleryPhoto.create!(gallery: gallery, photo: photo2, position: 1)
       GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 2)
 
@@ -56,6 +58,7 @@ module BeautifulPhotons
 
     test "beautiful_photons_photos returns photos for a gallery" do
       gallery = Gallery.create!(name: "query_gallery", title: "Query")
+      @photo.update!(published: true)
       GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
 
       photos = beautiful_photons_photos("query_gallery")
@@ -117,9 +120,26 @@ module BeautifulPhotons
       assert_equal "New slot", standalone.label
     end
 
+    test "beautiful_photons_gallery only yields published photos" do
+      gallery = Gallery.create!(name: "pub_gallery", title: "Published")
+      unpublished = create_photo("Draft")
+      @photo.update!(published: true)
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
+      GalleryPhoto.create!(gallery: gallery, photo: unpublished, position: 2)
+      # Force unpublished to test helper filtering (auto-publish set it to true)
+      unpublished.update_column(:published, false)
+
+      titles = []
+      beautiful_photons_gallery("pub_gallery") { |photo| titles << photo.title }
+
+      assert_equal %w[Test], titles
+    end
+
     test "beautiful_photons_photos filters by category" do
       gallery = Gallery.create!(name: "filtered_gallery", title: "Filtered")
       photo2 = create_photo("Other")
+      @photo.update!(published: true)
+      photo2.update!(published: true)
       GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1, category: "backsplashes")
       GalleryPhoto.create!(gallery: gallery, photo: photo2, position: 2, category: "bathrooms")
 
