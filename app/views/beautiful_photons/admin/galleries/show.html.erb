@@ -34,6 +34,9 @@
                       style: "width: 100%; height: 100%; object-fit: cover;" %>
                   </div>
                 </label>
+                <% if gp.category.present? %>
+                  <span class="gallery-photo-category" style="display: block; margin-top: 0.25rem; font-size: 0.75rem; color: #6b7280;"><%= gp.category %></span>
+                <% end %>
               </div>
             <% end %>
           <% end %>

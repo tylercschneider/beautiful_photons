@@ -132,6 +132,17 @@ module BeautifulPhotons
         assert BeautifulPhotons::Photo.exists?(photo.id), "Photo should not be deleted"
       end
 
+      test "GET /galleries/:id shows category labels on photos" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo = create_photo(title: "Backsplash Photo")
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1, category: "backsplashes")
+
+        get gallery_url(gallery)
+
+        assert_response :ok
+        assert_select ".gallery-photo-category", "backsplashes"
+      end
+
       test "PATCH /galleries/:id updates the gallery and redirects" do
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
 
