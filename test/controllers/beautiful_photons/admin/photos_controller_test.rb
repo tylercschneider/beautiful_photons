@@ -95,8 +95,18 @@ module BeautifulPhotons
 
         assert_response :ok
         assert_select "form"
-        assert_match "photo[image]", response.body
-        assert_match "Title", response.body
+        assert_match "images[]", response.body
+      end
+
+      test "POST /photos/bulk_create uploads multiple photos" do
+        image = fixture_file_upload("test_image.jpg", "image/jpeg")
+
+        assert_difference("BeautifulPhotons::Photo.count", 2) do
+          post bulk_create_photos_url, params: { images: [ image, image ] }
+        end
+
+        assert_redirected_to photos_path
+        assert_equal "Uploaded 2 photos.", flash[:notice]
       end
 
       test "GET /photos/:id shows standalone usage" do
