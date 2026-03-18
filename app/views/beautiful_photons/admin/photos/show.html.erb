@@ -14,9 +14,6 @@
           <p style="color: #6b7280; margin-bottom: 1rem;"><%= @photo.description %></p>
         <% end %>
         <div style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: center;">
-          <%= ui_form(action: beautiful_photons.toggle_published_photo_path(@photo), method: :patch) do %>
-            <%= ui_button(label: @photo.published? ? "Unpublish" : "Publish", type: :submit, variant: :secondary, size: :sm) %>
-          <% end %>
           <%= ui_button(label: "Edit", href: beautiful_photons.edit_photo_path(@photo), variant: :secondary, size: :sm) %>
           <%= ui_form(action: beautiful_photons.photo_path(@photo), method: :delete, data: { turbo_confirm: "Delete this photo? This cannot be undone." }) do %>
             <%= ui_button(label: "Delete", type: :submit, variant: :danger, size: :sm) %>

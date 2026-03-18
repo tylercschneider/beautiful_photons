@@ -126,6 +126,8 @@ module BeautifulPhotons
       @photo.update!(published: true)
       GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
       GalleryPhoto.create!(gallery: gallery, photo: unpublished, position: 2)
+      # Force unpublished to test helper filtering (auto-publish set it to true)
+      unpublished.update_column(:published, false)
 
       titles = []
       beautiful_photons_gallery("pub_gallery") { |photo| titles << photo.title }

@@ -81,6 +81,58 @@ module BeautifulPhotons
       assert_equal 20, @photo.effective_mobile_focal_y
     end
 
+    test "auto-publishes when added to a gallery" do
+      @photo.save!
+      gallery = Gallery.create!(name: "test", title: "Test")
+
+      assert_equal false, @photo.published
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
+
+      assert_equal true, @photo.reload.published
+    end
+
+    test "auto-unpublishes when removed from all galleries and standalones" do
+      @photo.save!
+      @photo.update!(published: true)
+      gallery = Gallery.create!(name: "test", title: "Test")
+      gp = GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
+
+      gp.destroy!
+
+      assert_equal false, @photo.reload.published
+    end
+
+    test "stays published when removed from gallery but still in standalone" do
+      @photo.save!
+      @photo.update!(published: true)
+      gallery = Gallery.create!(name: "test", title: "Test")
+      gp = GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
+      Standalone.create!(key: "hero", photo: @photo)
+
+      gp.destroy!
+
+      assert_equal true, @photo.reload.published
+    end
+
+    test "auto-publishes when assigned to a standalone" do
+      @photo.save!
+      assert_equal false, @photo.published
+
+      Standalone.create!(key: "hero", photo: @photo)
+
+      assert_equal true, @photo.reload.published
+    end
+
+    test "auto-unpublishes when unassigned from standalone" do
+      @photo.save!
+      @photo.update!(published: true)
+      standalone = Standalone.create!(key: "hero", photo: @photo)
+
+      standalone.update!(photo: nil)
+
+      assert_equal false, @photo.reload.published
+    end
+
     test "published scope returns only published photos" do
       @photo.published = true
       @photo.save!

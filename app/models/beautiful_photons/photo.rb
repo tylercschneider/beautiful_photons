@@ -11,6 +11,11 @@ module BeautifulPhotons
 
     scope :published, -> { where(published: true) }
 
+    def update_published!
+      in_use = gallery_photos.exists? || standalones.exists?
+      update_column(:published, in_use) if published? != in_use
+    end
+
     def effective_mobile_focal_x
       mobile_focal_x || focal_x
     end
