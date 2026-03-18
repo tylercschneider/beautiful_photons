@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_18_190629) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_18_194202) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -68,6 +68,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_190629) do
   end
 
   create_table "beautiful_photons_photos", force: :cascade do |t|
+    t.integer "category_id"
     t.datetime "created_at", null: false
     t.text "description"
     t.decimal "focal_x", default: "50.0", null: false
@@ -77,6 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_190629) do
     t.boolean "published", default: false, null: false
     t.string "title"
     t.datetime "updated_at", null: false
+    t.index [ "category_id" ], name: "index_beautiful_photons_photos_on_category_id"
   end
 
   create_table "beautiful_photons_standalones", force: :cascade do |t|
@@ -99,4 +101,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_190629) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "beautiful_photons_photos", "beautiful_photons_categories", column: "category_id"
 end
