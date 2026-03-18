@@ -18,7 +18,9 @@
           <% end %>
         <% end %>
       <% end %>
-      <div style="margin-top: 1rem;">
+      <div style="margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center;">
+        <label class="text-sm font-medium text-surface-700">Category <span class="text-surface-400">(optional)</span></label>
+        <%= ui_input(name: "category", placeholder: "e.g. backsplashes") %>
         <%= ui_button(label: "Add Selected") %>
       </div>
     <% end %>
