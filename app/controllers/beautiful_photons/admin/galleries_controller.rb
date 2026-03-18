@@ -23,6 +23,16 @@ module BeautifulPhotons
         end
       end
 
+      def edit
+        @gallery = BeautifulPhotons::Gallery.find(params[:id])
+      end
+
+      def update
+        @gallery = BeautifulPhotons::Gallery.find(params[:id])
+        @gallery.update!(gallery_params)
+        redirect_to beautiful_photons.gallery_path(@gallery)
+      end
+
       def show
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
         @gallery_photos = @gallery.gallery_photos.includes(:photo).order(:position)

@@ -97,6 +97,17 @@ module BeautifulPhotons
         assert_equal [ photo_a.id, photo_b.id ], gallery.gallery_photos.order(:position).pluck(:photo_id)
       end
 
+      test "PATCH /galleries/:id updates the gallery and redirects" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+
+        patch gallery_url(gallery), params: { gallery: { title: "Updated Portfolio", description: "A new description" } }
+
+        assert_redirected_to gallery_path(gallery)
+        gallery.reload
+        assert_equal "Updated Portfolio", gallery.title
+        assert_equal "A new description", gallery.description
+      end
+
       private
 
       def create_photo(title: "Test Photo")
