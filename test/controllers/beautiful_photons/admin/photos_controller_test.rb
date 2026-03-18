@@ -179,6 +179,24 @@ module BeautifulPhotons
         end
       end
 
+      test "GET /photos/:id shows published status and toggle button" do
+        photo = create_photo(title: "Status Check")
+
+        get photo_url(photo)
+
+        assert_response :ok
+        assert_select "form[action='#{toggle_published_photo_path(photo)}']" do
+          assert_select "button", "Publish"
+        end
+
+        photo.update!(published: true)
+        get photo_url(photo)
+
+        assert_select "form[action='#{toggle_published_photo_path(photo)}']" do
+          assert_select "button", "Unpublish"
+        end
+      end
+
       test "PATCH /photos/:id/toggle_published toggles published flag" do
         photo = create_photo(title: "Toggler")
         assert_equal false, photo.published
