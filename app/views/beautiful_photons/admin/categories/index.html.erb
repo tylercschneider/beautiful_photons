@@ -1,0 +1,28 @@
+<%= ui_page(max_width: :lg) do %>
+  <%= ui_page_header(title: "Categories") %>
+
+  <%= ui_section do %>
+    <%= ui_form(action: beautiful_photons.categories_path, method: :post) do %>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <%= ui_input(name: "category[name]", placeholder: "New category name") %>
+        <%= ui_button(label: "Add", size: :sm) %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= ui_section do %>
+    <% if @categories.any? %>
+      <% @categories.each do |category| %>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb;">
+          <span><%= category.name %></span>
+          <%= ui_form(action: beautiful_photons.category_path(category), method: :delete,
+            data: { turbo_confirm: "Delete this category?" }) do %>
+            <%= ui_button(label: "Delete", type: :submit, variant: :danger, size: :sm) %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p style="color: #6b7280;">No categories yet.</p>
+    <% end %>
+  <% end %>
+<% end %>
