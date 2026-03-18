@@ -179,6 +179,20 @@ module BeautifulPhotons
         end
       end
 
+      test "PATCH /photos/:id/toggle_published toggles published flag" do
+        photo = create_photo(title: "Toggler")
+        assert_equal false, photo.published
+
+        patch toggle_published_photo_url(photo)
+
+        assert_redirected_to photo_path(photo)
+        assert_equal true, photo.reload.published
+
+        patch toggle_published_photo_url(photo)
+
+        assert_equal false, photo.reload.published
+      end
+
       test "GET /photos/:id shows standalone usage" do
         photo = create_photo(title: "About Photo")
         BeautifulPhotons::Standalone.create!(key: "about_hero", label: "About Hero", photo: photo)

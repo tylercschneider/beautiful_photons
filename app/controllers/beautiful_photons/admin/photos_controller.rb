@@ -58,6 +58,12 @@ module BeautifulPhotons
         redirect_to beautiful_photons.photos_path, notice: "Photo deleted."
       end
 
+      def toggle_published
+        @photo = BeautifulPhotons::Photo.find(params[:id])
+        @photo.update!(published: !@photo.published)
+        redirect_to beautiful_photons.photo_path(@photo)
+      end
+
       def bulk_destroy
         ids = Array(params[:photo_ids])
         BeautifulPhotons::Photo.where(id: ids).destroy_all

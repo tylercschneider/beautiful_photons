@@ -3,6 +3,7 @@ BeautifulPhotons::Engine.routes.draw do
     resources :photos, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
       post :bulk_create, on: :collection
       delete :bulk_destroy, on: :collection
+      patch :toggle_published, on: :member
     end
     resources :standalones, only: [ :index, :show, :update ] do
       member do
