@@ -1,16 +1,27 @@
-<%= ui_form_page(title: "Upload Photo", back_url: beautiful_photons.photos_path) %>
+<%= ui_form_page(title: "Upload Photos", back_url: beautiful_photons.photos_path) %>
 
 <%= ui_page(max_width: :lg) do %>
-  <%= ui_form(action: beautiful_photons.photos_path, method: :post, multipart: true) do %>
-    <%= ui_section(title: "Image") do %>
+  <%= ui_section(title: "Bulk Upload") do %>
+    <%= ui_form(action: beautiful_photons.bulk_create_photos_path, method: :post, multipart: true) do %>
+      <%= ui_file_upload(name: "images[]", accept: "image/*", multiple: true, label: "Choose photos", hint: "Select multiple images. Titles auto-generate from filenames.") %>
+      <div style="margin-top: 1rem;">
+        <%= ui_button(label: "Upload") %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= ui_section(title: "Single Upload") do %>
+    <%= ui_form(action: beautiful_photons.photos_path, method: :post, multipart: true) do %>
       <%= ui_file_upload(name: "photo[image]", accept: "image/*") %>
+      <div style="margin-top: 0.75rem;">
+        <%= ui_input(name: "photo[title]", placeholder: "Title") %>
+      </div>
+      <div style="margin-top: 0.5rem;">
+        <%= ui_textarea(name: "photo[description]", placeholder: "Description") %>
+      </div>
+      <div style="margin-top: 1rem;">
+        <%= ui_button(label: "Upload", variant: :secondary) %>
+      </div>
     <% end %>
-
-    <%= ui_section(title: "Details") do %>
-      <%= ui_input(name: "photo[title]", placeholder: "Title") %>
-      <%= ui_textarea(name: "photo[description]", placeholder: "Description") %>
-    <% end %>
-
-    <%= ui_button(label: "Upload") %>
   <% end %>
 <% end %>

@@ -1,6 +1,8 @@
 BeautifulPhotons::Engine.routes.draw do
   scope module: :admin do
-    resources :photos, only: [ :index, :show, :new, :create, :edit, :update ]
+    resources :photos, only: [ :index, :show, :new, :create, :edit, :update ] do
+      post :bulk_create, on: :collection
+    end
     resources :standalones, only: [ :index, :show, :update ] do
       member do
         get :edit_crop
