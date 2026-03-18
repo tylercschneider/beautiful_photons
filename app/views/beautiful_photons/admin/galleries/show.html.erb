@@ -6,6 +6,15 @@
       <%= ui_form(action: beautiful_photons.remove_photos_gallery_path(@gallery), method: :delete,
         data: { bulk_select_target: "form" }) do %>
 
+        <% if @category_stats.any? %>
+          <div style="display: flex; gap: 1rem; margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">
+            <% total = @category_stats.values.sum %>
+            <% @category_stats.sort_by { |_, count| -count }.each do |category, count| %>
+              <span><%= ((count.to_f / total) * 100).round %>% <%= category %></span>
+            <% end %>
+          </div>
+        <% end %>
+
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center;">
           <%= ui_button(label: "Add Photos", href: beautiful_photons.add_photos_page_gallery_path(@gallery)) %>
           <%= ui_button(label: "Edit", href: beautiful_photons.edit_gallery_path(@gallery), variant: :secondary, size: :sm) %>
@@ -34,6 +43,9 @@
                       style: "width: 100%; height: 100%; object-fit: cover;" %>
                   </div>
                 </label>
+                <% if gp.category.present? %>
+                  <span class="gallery-photo-category" style="display: block; margin-top: 0.25rem; font-size: 0.75rem; color: #6b7280;"><%= gp.category %></span>
+                <% end %>
               </div>
             <% end %>
           <% end %>

@@ -42,6 +42,7 @@ module BeautifulPhotons
       def show
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
         @gallery_photos = @gallery.gallery_photos.includes(:photo).order(:position)
+        @category_stats = @gallery.gallery_photos.where.not(category: [ nil, "" ]).group(:category).count
       end
 
       def add_photos_page
@@ -65,9 +66,10 @@ module BeautifulPhotons
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
         max_position = @gallery.gallery_photos.maximum(:position) || 0
         ids = Array(params[:photo_ids])
+        category = params[:category].presence
 
         ids.each_with_index do |photo_id, index|
-          @gallery.gallery_photos.find_or_create_by!(photo_id: photo_id) do |gp|
+          @gallery.gallery_photos.find_or_create_by!(photo_id: photo_id, category: category) do |gp|
             gp.position = max_position + index + 1
           end
         end

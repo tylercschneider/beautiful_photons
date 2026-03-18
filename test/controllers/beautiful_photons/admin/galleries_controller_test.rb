@@ -132,6 +132,49 @@ module BeautifulPhotons
         assert BeautifulPhotons::Photo.exists?(photo.id), "Photo should not be deleted"
       end
 
+      test "POST /galleries/:id/add_photos saves category from form" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo = create_photo(title: "Backsplash")
+
+        post add_photos_gallery_url(gallery), params: { photo_ids: [ photo.id ], category: "backsplashes" }
+
+        gp = gallery.gallery_photos.find_by(photo_id: photo.id)
+        assert_equal "backsplashes", gp.category
+      end
+
+      test "GET /galleries/:id/add_photos_page has a category field" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        create_photo(title: "Available")
+
+        get add_photos_page_gallery_url(gallery)
+
+        assert_response :ok
+        assert_select "input[name='category']"
+      end
+
+      test "GET /galleries/:id shows category percentage stats" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        3.times { |i| BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: create_photo(title: "B#{i}"), position: i + 1, category: "backsplashes") }
+        7.times { |i| BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: create_photo(title: "F#{i}"), position: i + 4, category: "floors") }
+
+        get gallery_url(gallery)
+
+        assert_response :ok
+        assert_match "30% backsplashes", response.body
+        assert_match "70% floors", response.body
+      end
+
+      test "GET /galleries/:id shows category labels on photos" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo = create_photo(title: "Backsplash Photo")
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1, category: "backsplashes")
+
+        get gallery_url(gallery)
+
+        assert_response :ok
+        assert_select ".gallery-photo-category", "backsplashes"
+      end
+
       test "PATCH /galleries/:id updates the gallery and redirects" do
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
 
