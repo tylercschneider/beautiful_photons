@@ -152,6 +152,18 @@ module BeautifulPhotons
         assert_select "input[name='category']"
       end
 
+      test "GET /galleries/:id shows category percentage stats" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        3.times { |i| BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: create_photo(title: "B#{i}"), position: i + 1, category: "backsplashes") }
+        7.times { |i| BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: create_photo(title: "F#{i}"), position: i + 4, category: "floors") }
+
+        get gallery_url(gallery)
+
+        assert_response :ok
+        assert_match "30% backsplashes", response.body
+        assert_match "70% floors", response.body
+      end
+
       test "GET /galleries/:id shows category labels on photos" do
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
         photo = create_photo(title: "Backsplash Photo")
