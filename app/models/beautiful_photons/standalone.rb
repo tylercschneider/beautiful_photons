@@ -15,7 +15,7 @@ module BeautifulPhotons
     end
 
     def update_photo_published
-      old_id, new_id = saved_change_to_photo_id || [photo_id, nil]
+      old_id, new_id = saved_change_to_photo_id || [ photo_id, nil ]
       Photo.find_by(id: old_id)&.update_published! if old_id
       Photo.find_by(id: new_id)&.update_published! if new_id
     end
