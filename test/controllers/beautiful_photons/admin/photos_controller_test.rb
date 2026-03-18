@@ -120,6 +120,18 @@ module BeautifulPhotons
         assert_equal "Photo deleted.", flash[:notice]
       end
 
+      test "DELETE /photos/:id nullifies standalones and destroys gallery_photos" do
+        photo = create_photo(title: "Cascading")
+        standalone = BeautifulPhotons::Standalone.create!(key: "hero", label: "Hero", photo: photo)
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        gallery_photo = BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1)
+
+        delete photo_url(photo)
+
+        assert_nil standalone.reload.photo_id
+        assert_raises(ActiveRecord::RecordNotFound) { gallery_photo.reload }
+      end
+
       test "GET /photos/:id has a delete button" do
         photo = create_photo(title: "Deletable")
 
