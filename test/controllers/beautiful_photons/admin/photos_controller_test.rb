@@ -132,6 +132,20 @@ module BeautifulPhotons
         assert_raises(ActiveRecord::RecordNotFound) { gallery_photo.reload }
       end
 
+      test "DELETE /photos/bulk_destroy deletes selected photos" do
+        photo1 = create_photo(title: "Delete Me")
+        photo2 = create_photo(title: "Delete Me Too")
+        photo3 = create_photo(title: "Keep Me")
+
+        assert_difference("BeautifulPhotons::Photo.count", -2) do
+          delete bulk_destroy_photos_url, params: { photo_ids: [ photo1.id, photo2.id ] }
+        end
+
+        assert_redirected_to photos_path
+        assert_equal "Deleted 2 photos.", flash[:notice]
+        assert BeautifulPhotons::Photo.exists?(photo3.id)
+      end
+
       test "GET /photos/:id has a delete button" do
         photo = create_photo(title: "Deletable")
 
