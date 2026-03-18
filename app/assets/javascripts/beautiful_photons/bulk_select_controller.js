@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["checkbox", "removeButton", "modal", "modalMessage", "form"]
+  static values = { message: { type: String, default: "Remove {count} from this gallery?" } }
 
   connect() {
     this.updateButton()
@@ -24,7 +25,8 @@ export default class extends Controller {
     const count = this.selectedCount
     if (count === 0) return
 
-    this.modalMessageTarget.textContent = `Remove ${count} photo${count === 1 ? "" : "s"} from this gallery?`
+    const label = `${count} photo${count === 1 ? "" : "s"}`
+    this.modalMessageTarget.textContent = this.messageValue.replace("{count}", label)
     this.modalTarget.classList.remove("hidden")
   }
 

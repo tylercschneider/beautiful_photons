@@ -132,6 +132,17 @@ module BeautifulPhotons
         assert_raises(ActiveRecord::RecordNotFound) { gallery_photo.reload }
       end
 
+      test "GET /photos has bulk select checkboxes and delete button" do
+        photo = create_photo(title: "Selectable")
+
+        get photos_url
+
+        assert_response :ok
+        assert_select "[data-controller*='bulk-select']"
+        assert_select "input[type='checkbox'][name='photo_ids[]']"
+        assert_select "[data-bulk-select-target='removeButton']", "Delete Selected"
+      end
+
       test "DELETE /photos/bulk_destroy deletes selected photos" do
         photo1 = create_photo(title: "Delete Me")
         photo2 = create_photo(title: "Delete Me Too")
