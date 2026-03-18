@@ -153,26 +153,29 @@ module BeautifulPhotons
       end
 
       test "GET /galleries/:id shows category percentage stats" do
+        backsplashes = BeautifulPhotons::Category.create!(name: "Backsplashes")
+        floors = BeautifulPhotons::Category.create!(name: "Floors")
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
-        3.times { |i| BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: create_photo(title: "B#{i}"), position: i + 1, category: "backsplashes") }
-        7.times { |i| BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: create_photo(title: "F#{i}"), position: i + 4, category: "floors") }
+        3.times { |i| BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: create_photo(title: "B#{i}", category: backsplashes), position: i + 1) }
+        7.times { |i| BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: create_photo(title: "F#{i}", category: floors), position: i + 4) }
 
         get gallery_url(gallery)
 
         assert_response :ok
-        assert_match "30% backsplashes", response.body
-        assert_match "70% floors", response.body
+        assert_match "30% Backsplashes", response.body
+        assert_match "70% Floors", response.body
       end
 
       test "GET /galleries/:id shows category labels on photos" do
+        backsplashes = BeautifulPhotons::Category.create!(name: "Backsplashes")
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
-        photo = create_photo(title: "Backsplash Photo")
-        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1, category: "backsplashes")
+        photo = create_photo(title: "Backsplash Photo", category: backsplashes)
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1)
 
         get gallery_url(gallery)
 
         assert_response :ok
-        assert_select ".gallery-photo-category", "backsplashes"
+        assert_select ".gallery-photo-category", "Backsplashes"
       end
 
       test "PATCH /galleries/:id updates the gallery and redirects" do
@@ -188,8 +191,8 @@ module BeautifulPhotons
 
       private
 
-      def create_photo(title: "Test Photo")
-        photo = BeautifulPhotons::Photo.new(title: title)
+      def create_photo(title: "Test Photo", category: nil)
+        photo = BeautifulPhotons::Photo.new(title: title, category: category)
         photo.image.attach(
           io: File.open(File.expand_path("../../../fixtures/files/test_image.jpg", __dir__)),
           filename: "test_image.jpg",
