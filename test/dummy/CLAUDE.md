@@ -43,6 +43,7 @@
 | `variant:` | no | `:primary` | `:primary`, `:secondary`, `:danger` |
 | `size:` | no | `:md` | `:sm`, `:md`, `:lg` |
 | `type:` | no | `:submit` | HTML button type (ignored when `href` is set) |
+| `data:` | no | `nil` | hash of data attributes (e.g. Stimulus targets/actions) |
 
 ### `ui_data_table`
 
