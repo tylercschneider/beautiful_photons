@@ -11,7 +11,7 @@ BeautifulPhotons::Engine.routes.draw do
         get :change_photo
       end
     end
-    resources :galleries, only: [ :index, :show, :new, :create ] do
+    resources :galleries, only: [ :index, :show, :new, :create, :edit, :update, :destroy ] do
       member do
         patch :reorder
         get :add_photos_page

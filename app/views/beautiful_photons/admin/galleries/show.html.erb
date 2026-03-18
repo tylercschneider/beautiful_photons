@@ -8,6 +8,11 @@
 
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center;">
           <%= ui_button(label: "Add Photos", href: beautiful_photons.add_photos_page_gallery_path(@gallery)) %>
+          <%= ui_button(label: "Edit", href: beautiful_photons.edit_gallery_path(@gallery), variant: :secondary, size: :sm) %>
+          <%= ui_form(action: beautiful_photons.gallery_path(@gallery), method: :delete,
+            data: { turbo_confirm: "Delete this gallery? This cannot be undone." }) do %>
+            <%= ui_button(label: "Delete", type: :submit, variant: :danger, size: :sm) %>
+          <% end %>
           <%= ui_button(label: "Remove Selected", type: :button, variant: :danger, size: :sm,
             data: { bulk_select_target: "removeButton", action: "click->bulk-select#showConfirm" }) %>
         </div>
@@ -52,11 +57,16 @@
       </div>
     </div>
   <% else %>
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center;">
+      <%= ui_button(label: "Add Photos", href: beautiful_photons.add_photos_page_gallery_path(@gallery)) %>
+      <%= ui_button(label: "Edit", href: beautiful_photons.edit_gallery_path(@gallery), variant: :secondary, size: :sm) %>
+      <%= ui_form(action: beautiful_photons.gallery_path(@gallery), method: :delete,
+        data: { turbo_confirm: "Delete this gallery? This cannot be undone." }) do %>
+        <%= ui_button(label: "Delete", type: :submit, variant: :danger, size: :sm) %>
+      <% end %>
+    </div>
     <%= ui_section do %>
       <p>No photos in this gallery yet.</p>
-      <div style="margin-top: 0.75rem;">
-        <%= ui_button(label: "Add Photos", href: beautiful_photons.add_photos_page_gallery_path(@gallery)) %>
-      </div>
     <% end %>
   <% end %>
 <% end %>

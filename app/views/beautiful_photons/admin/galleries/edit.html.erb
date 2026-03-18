@@ -1,0 +1,17 @@
+<%= ui_form_page(title: "Edit Gallery", back_url: beautiful_photons.gallery_path(@gallery)) %>
+
+<%= ui_page(max_width: :lg) do %>
+  <%= ui_form(action: beautiful_photons.gallery_path(@gallery), method: :patch) do %>
+    <%= ui_section do %>
+      <label class="block text-sm font-medium text-surface-700 mb-1">Title</label>
+      <%= ui_input(name: "gallery[title]", value: @gallery.title) %>
+    <% end %>
+
+    <%= ui_section do %>
+      <label class="block text-sm font-medium text-surface-700 mb-1">Description <span class="text-surface-400">(optional)</span></label>
+      <%= ui_textarea(name: "gallery[description]", value: @gallery.description) %>
+    <% end %>
+
+    <%= ui_button(label: "Save") %>
+  <% end %>
+<% end %>

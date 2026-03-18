@@ -97,6 +97,52 @@ module BeautifulPhotons
         assert_equal [ photo_a.id, photo_b.id ], gallery.gallery_photos.order(:position).pluck(:photo_id)
       end
 
+      test "GET /galleries/:id has an edit button" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+
+        get gallery_url(gallery)
+
+        assert_response :ok
+        assert_select "a[href='#{edit_gallery_path(gallery)}']", "Edit"
+      end
+
+      test "GET /galleries/:id has a delete button" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+
+        get gallery_url(gallery)
+
+        assert_response :ok
+        assert_select "form[action='#{gallery_path(gallery)}'][method='post']" do
+          assert_select "input[name='_method'][value='delete']"
+          assert_select "button", "Delete"
+        end
+      end
+
+      test "DELETE /galleries/:id destroys the gallery and redirects" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo = create_photo(title: "In Gallery")
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1)
+
+        assert_difference("BeautifulPhotons::Gallery.count", -1) do
+          delete gallery_url(gallery)
+        end
+
+        assert_redirected_to galleries_path
+        assert_equal "Gallery deleted.", flash[:notice]
+        assert BeautifulPhotons::Photo.exists?(photo.id), "Photo should not be deleted"
+      end
+
+      test "PATCH /galleries/:id updates the gallery and redirects" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+
+        patch gallery_url(gallery), params: { gallery: { title: "Updated Portfolio", description: "A new description" } }
+
+        assert_redirected_to gallery_path(gallery)
+        gallery.reload
+        assert_equal "Updated Portfolio", gallery.title
+        assert_equal "A new description", gallery.description
+      end
+
       private
 
       def create_photo(title: "Test Photo")
