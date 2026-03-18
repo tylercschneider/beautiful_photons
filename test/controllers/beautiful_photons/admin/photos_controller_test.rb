@@ -109,6 +109,17 @@ module BeautifulPhotons
         assert_equal "Uploaded 2 photos.", flash[:notice]
       end
 
+      test "DELETE /photos/:id destroys the photo and redirects" do
+        photo = create_photo(title: "To Delete")
+
+        assert_difference("BeautifulPhotons::Photo.count", -1) do
+          delete photo_url(photo)
+        end
+
+        assert_redirected_to photos_path
+        assert_equal "Photo deleted.", flash[:notice]
+      end
+
       test "GET /photos/:id shows standalone usage" do
         photo = create_photo(title: "About Photo")
         BeautifulPhotons::Standalone.create!(key: "about_hero", label: "About Hero", photo: photo)
