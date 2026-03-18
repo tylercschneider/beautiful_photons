@@ -106,6 +106,18 @@ module BeautifulPhotons
         assert_select "a[href='#{edit_gallery_path(gallery)}']", "Edit"
       end
 
+      test "GET /galleries/:id has a delete button" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+
+        get gallery_url(gallery)
+
+        assert_response :ok
+        assert_select "form[action='#{gallery_path(gallery)}'][method='post']" do
+          assert_select "input[name='_method'][value='delete']"
+          assert_select "button", "Delete"
+        end
+      end
+
       test "DELETE /galleries/:id destroys the gallery and redirects" do
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
         photo = create_photo(title: "In Gallery")
