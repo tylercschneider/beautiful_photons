@@ -33,6 +33,12 @@ module BeautifulPhotons
         redirect_to beautiful_photons.gallery_path(@gallery)
       end
 
+      def destroy
+        @gallery = BeautifulPhotons::Gallery.find(params[:id])
+        @gallery.destroy!
+        redirect_to beautiful_photons.galleries_path, notice: "Gallery deleted."
+      end
+
       def show
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
         @gallery_photos = @gallery.gallery_photos.includes(:photo).order(:position)

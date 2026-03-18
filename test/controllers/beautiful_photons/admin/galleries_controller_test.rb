@@ -106,6 +106,20 @@ module BeautifulPhotons
         assert_select "a[href='#{edit_gallery_path(gallery)}']", "Edit"
       end
 
+      test "DELETE /galleries/:id destroys the gallery and redirects" do
+        gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
+        photo = create_photo(title: "In Gallery")
+        BeautifulPhotons::GalleryPhoto.create!(gallery: gallery, photo: photo, position: 1)
+
+        assert_difference("BeautifulPhotons::Gallery.count", -1) do
+          delete gallery_url(gallery)
+        end
+
+        assert_redirected_to galleries_path
+        assert_equal "Gallery deleted.", flash[:notice]
+        assert BeautifulPhotons::Photo.exists?(photo.id), "Photo should not be deleted"
+      end
+
       test "PATCH /galleries/:id updates the gallery and redirects" do
         gallery = BeautifulPhotons::Gallery.create!(name: "portfolio", title: "Portfolio")
 
