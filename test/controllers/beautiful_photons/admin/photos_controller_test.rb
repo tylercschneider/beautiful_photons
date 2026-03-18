@@ -143,6 +143,16 @@ module BeautifulPhotons
         assert_select "[data-bulk-select-target='removeButton']", "Delete Selected"
       end
 
+      test "GET /photos has select all and unselect all buttons" do
+        create_photo(title: "Photo A")
+
+        get photos_url
+
+        assert_response :ok
+        assert_select "[data-bulk-select-target='selectAllButton']", "Select All"
+        assert_select "[data-bulk-select-target='unselectAllButton']", "Unselect All"
+      end
+
       test "DELETE /photos/bulk_destroy deletes selected photos" do
         photo1 = create_photo(title: "Delete Me")
         photo2 = create_photo(title: "Delete Me Too")
