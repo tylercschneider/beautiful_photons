@@ -13,6 +13,16 @@
         <% if @photo.description.present? %>
           <p style="color: #6b7280; margin-bottom: 1rem;"><%= @photo.description %></p>
         <% end %>
+        <div style="margin-bottom: 0.75rem;">
+          <%= ui_form(action: beautiful_photons.photo_path(@photo), method: :patch) do %>
+            <label class="block text-sm font-medium text-surface-700 mb-1">Category</label>
+            <%= ui_select(name: "photo[category_id]",
+              options: BeautifulPhotons::Category.order(:name).map { |c| [ c.name, c.id ] },
+              selected: @photo.category_id,
+              include_blank: "None") %>
+            <%= ui_button(label: "Save", size: :sm) %>
+          <% end %>
+        </div>
         <div style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: center;">
           <%= ui_button(label: "Edit", href: beautiful_photons.edit_photo_path(@photo), variant: :secondary, size: :sm) %>
           <%= ui_form(action: beautiful_photons.photo_path(@photo), method: :delete, data: { turbo_confirm: "Delete this photo? This cannot be undone." }) do %>

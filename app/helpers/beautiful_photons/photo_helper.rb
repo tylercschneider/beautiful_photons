@@ -93,7 +93,10 @@ module BeautifulPhotons
     def beautiful_photons_photos(gallery_name, category: nil)
       gallery = Gallery.find_by!(name: gallery_name)
       scope = gallery.gallery_photos.joins(:photo).where(photo: { published: true }).order(:position)
-      scope = scope.where(category: category) if category
+      if category
+        scope = scope.joins(photo: :category)
+          .where(beautiful_photons_categories: { name: category })
+      end
       scope.map(&:photo)
     end
   end

@@ -1,4 +1,4 @@
-class CreateBeautifulPhotonsGalleries < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+class CreateBeautifulPhotonsGalleries < ActiveRecord::Migration[8.1]
   def change
     create_table :beautiful_photons_galleries do |t|
       t.string :name, null: false

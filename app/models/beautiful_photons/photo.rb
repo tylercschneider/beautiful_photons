@@ -1,5 +1,7 @@
 module BeautifulPhotons
   class Photo < ApplicationRecord
+    belongs_to :category, optional: true
+
     has_one_attached :image
     has_many :gallery_photos, dependent: :destroy
     has_many :galleries, through: :gallery_photos

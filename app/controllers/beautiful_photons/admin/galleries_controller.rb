@@ -41,8 +41,11 @@ module BeautifulPhotons
 
       def show
         @gallery = BeautifulPhotons::Gallery.find(params[:id])
-        @gallery_photos = @gallery.gallery_photos.includes(:photo).order(:position)
-        @category_stats = @gallery.gallery_photos.where.not(category: [ nil, "" ]).group(:category).count
+        @gallery_photos = @gallery.gallery_photos.includes(photo: :category).order(:position)
+        @category_stats = @gallery.gallery_photos
+          .joins(photo: :category)
+          .group("beautiful_photons_categories.name")
+          .count
       end
 
       def add_photos_page

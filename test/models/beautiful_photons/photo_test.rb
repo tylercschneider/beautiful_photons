@@ -133,6 +133,19 @@ module BeautifulPhotons
       assert_equal false, @photo.reload.published
     end
 
+    test "can belong to a category" do
+      @photo.save!
+      category = BeautifulPhotons::Category.create!(name: "Backsplashes")
+      @photo.update!(category: category)
+
+      assert_equal category, @photo.reload.category
+    end
+
+    test "category is optional" do
+      @photo.category = nil
+      assert @photo.valid?
+    end
+
     test "published scope returns only published photos" do
       @photo.published = true
       @photo.save!

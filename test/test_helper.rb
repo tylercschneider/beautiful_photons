@@ -3,10 +3,6 @@
 ENV["RAILS_ENV"] = "test"
 
 require_relative "dummy/config/environment"
-
-ActiveRecord::Schema.verbose = false
-load File.expand_path("dummy/db/schema.rb", __dir__)
-
 require "rails/test_help"
 
 ActionController::Base.allow_forgery_protection = false

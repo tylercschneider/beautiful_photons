@@ -179,6 +179,19 @@ module BeautifulPhotons
         end
       end
 
+      test "GET /photos/:id has a category dropdown" do
+        photo = create_photo(title: "Categorizable")
+        BeautifulPhotons::Category.create!(name: "Backsplashes")
+        BeautifulPhotons::Category.create!(name: "Floors")
+
+        get photo_url(photo)
+
+        assert_response :ok
+        assert_select "select[name='photo[category_id]']"
+        assert_select "option", "Backsplashes"
+        assert_select "option", "Floors"
+      end
+
       test "GET /photos/:id shows standalone usage" do
         photo = create_photo(title: "About Photo")
         BeautifulPhotons::Standalone.create!(key: "about_hero", label: "About Hero", photo: photo)
