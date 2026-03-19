@@ -9,7 +9,7 @@ PATH
   remote: .
   specs:
     beautiful_photons (0.1.0)
-      keystone_ui
+      keystone_ui (>= 0.4.1)
       rails (>= 8.1.2)
       turbo-rails
 
