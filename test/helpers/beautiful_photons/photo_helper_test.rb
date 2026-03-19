@@ -136,14 +136,16 @@ module BeautifulPhotons
     end
 
     test "beautiful_photons_photos filters by category" do
+      backsplashes = Category.create!(name: "Backsplashes")
+      bathrooms = Category.create!(name: "Bathrooms")
       gallery = Gallery.create!(name: "filtered_gallery", title: "Filtered")
       photo2 = create_photo("Other")
-      @photo.update!(published: true)
-      photo2.update!(published: true)
-      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1, category: "backsplashes")
-      GalleryPhoto.create!(gallery: gallery, photo: photo2, position: 2, category: "bathrooms")
+      @photo.update!(published: true, category: backsplashes)
+      photo2.update!(published: true, category: bathrooms)
+      GalleryPhoto.create!(gallery: gallery, photo: @photo, position: 1)
+      GalleryPhoto.create!(gallery: gallery, photo: photo2, position: 2)
 
-      photos = beautiful_photons_photos("filtered_gallery", category: "backsplashes")
+      photos = beautiful_photons_photos("filtered_gallery", category: "Backsplashes")
 
       assert_equal 1, photos.length
       assert_equal @photo, photos.first
