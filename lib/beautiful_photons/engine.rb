@@ -2,6 +2,12 @@ module BeautifulPhotons
   class Engine < ::Rails::Engine
     isolate_namespace BeautifulPhotons
 
+    initializer "beautiful_photons.migrations" do |app|
+      config.paths["db/migrate"].expanded.each do |expanded_path|
+        app.config.paths["db/migrate"] << expanded_path
+      end
+    end
+
     initializer "beautiful_photons.importmap", before: "importmap" do |app|
       if app.config.respond_to?(:importmap)
         app.config.importmap.paths << root.join("config/importmap.rb")

@@ -1,4 +1,4 @@
-class CreateBeautifulPhotonsGalleryPhotos < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+class CreateBeautifulPhotonsGalleryPhotos < ActiveRecord::Migration[8.1]
   def change
     create_table :beautiful_photons_gallery_photos do |t|
       t.references :gallery, null: false, foreign_key: { to_table: :beautiful_photons_galleries }

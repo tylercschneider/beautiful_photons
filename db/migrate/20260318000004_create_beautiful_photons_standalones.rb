@@ -1,4 +1,4 @@
-class CreateBeautifulPhotonsStandalones < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+class CreateBeautifulPhotonsStandalones < ActiveRecord::Migration[8.1]
   def change
     create_table :beautiful_photons_standalones do |t|
       t.string :key, null: false

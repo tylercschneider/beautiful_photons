@@ -1,4 +1,4 @@
-class AddCropToBeautifulPhotonsStandalones < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+class AddCropToBeautifulPhotonsStandalones < ActiveRecord::Migration[8.1]
   def change
     add_column :beautiful_photons_standalones, :aspect, :string
     add_column :beautiful_photons_standalones, :mobile_aspect, :string
