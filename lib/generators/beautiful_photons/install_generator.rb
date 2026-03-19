@@ -8,7 +8,7 @@ module BeautifulPhotons
       desc "Install BeautifulPhotons photo gallery engine"
 
       def mount_engine
-        route 'mount BeautifulPhotons::Engine => "/beautiful_photons"'
+        route 'mount BeautifulPhotons::Engine, at: "/photos"'
       end
 
       def print_instructions
