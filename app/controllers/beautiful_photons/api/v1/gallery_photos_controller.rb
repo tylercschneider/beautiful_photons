@@ -2,7 +2,6 @@ module BeautifulPhotons
   module Api
     module V1
       class GalleryPhotosController < Api::BaseController
-
         def index
           gallery = Gallery.find(params[:gallery_id])
           gallery_photos = gallery.gallery_photos.order(:position)

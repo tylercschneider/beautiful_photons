@@ -2,7 +2,6 @@ module BeautifulPhotons
   module Api
     module V1
       class PhotosController < Api::BaseController
-
         def index
           photos = Photo.all
           render json: photos.map { |photo| photo_json(photo) }
