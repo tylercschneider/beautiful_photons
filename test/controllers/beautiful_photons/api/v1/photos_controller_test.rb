@@ -17,7 +17,7 @@ module BeautifulPhotons
         test "GET /api/v1/photos/:id returns a single photo" do
           photo = create_photo(title: "Mountain")
 
-          get api_v1_photo_url(photo)
+          get api_v1_photo_url(photo), headers: auth_headers
 
           assert_response :ok
 
@@ -28,7 +28,8 @@ module BeautifulPhotons
 
         test "POST /api/v1/photos creates a photo" do
           assert_difference("BeautifulPhotons::Photo.count", 1) do
-            post api_v1_photos_url, params: { photo: { title: "Sunset", image: @image } }
+            post api_v1_photos_url, params: { photo: { title: "Sunset", image: @image } },
+              headers: auth_headers
           end
 
           assert_response :created
@@ -42,7 +43,7 @@ module BeautifulPhotons
         test "GET /api/v1/photos returns list of photos" do
           photo = create_photo(title: "Beach")
 
-          get api_v1_photos_url
+          get api_v1_photos_url, headers: auth_headers
 
           assert_response :ok
 
@@ -57,7 +58,7 @@ module BeautifulPhotons
 
           patch api_v1_photo_url(photo), params: {
             photo: { title: "New Title", focal_x: 25.0, focal_y: 75.0, published: true }
-          }
+          }, headers: auth_headers
 
           assert_response :ok
 
@@ -71,7 +72,8 @@ module BeautifulPhotons
         test "PATCH /api/v1/photos/:id returns 422 with invalid focal points" do
           photo = create_photo
 
-          patch api_v1_photo_url(photo), params: { photo: { focal_x: 150 } }
+          patch api_v1_photo_url(photo), params: { photo: { focal_x: 150 } },
+            headers: auth_headers
 
           assert_response :unprocessable_entity
 
@@ -83,14 +85,15 @@ module BeautifulPhotons
           photo = create_photo
 
           assert_difference("BeautifulPhotons::Photo.count", -1) do
-            delete api_v1_photo_url(photo)
+            delete api_v1_photo_url(photo), headers: auth_headers
           end
 
           assert_response :no_content
         end
 
         test "POST /api/v1/photos returns 422 without image" do
-          post api_v1_photos_url, params: { photo: { title: "No Image" } }
+          post api_v1_photos_url, params: { photo: { title: "No Image" } },
+            headers: auth_headers
 
           assert_response :unprocessable_entity
 
@@ -98,7 +101,17 @@ module BeautifulPhotons
           assert_includes json["errors"], "Image can't be blank"
         end
 
+        test "unauthenticated request returns 401" do
+          post api_v1_photos_url, params: { photo: { title: "Sneaky", image: @image } }
+
+          assert_response :unauthorized
+        end
+
         private
+
+        def auth_headers
+          { "Authorization" => "token test-api-token" }
+        end
 
         def create_photo(title: "Test Photo")
           photo = BeautifulPhotons::Photo.new(title: title)

@@ -14,7 +14,7 @@ module BeautifulPhotons
           assert_difference("BeautifulPhotons::Gallery.count", 1) do
             post api_v1_galleries_url, params: {
               gallery: { name: "portfolio", title: "Portfolio", description: "Our work" }
-            }
+            }, headers: auth_headers
           end
 
           assert_response :created
@@ -28,7 +28,7 @@ module BeautifulPhotons
         test "GET /api/v1/galleries/:id returns a single gallery" do
           gallery = Gallery.create!(name: "services", title: "Services")
 
-          get api_v1_gallery_url(gallery)
+          get api_v1_gallery_url(gallery), headers: auth_headers
 
           assert_response :ok
 
@@ -42,7 +42,7 @@ module BeautifulPhotons
 
           patch api_v1_gallery_url(gallery), params: {
             gallery: { title: "New Title", description: "Updated" }
-          }
+          }, headers: auth_headers
 
           assert_response :ok
 
@@ -55,14 +55,15 @@ module BeautifulPhotons
           gallery = Gallery.create!(name: "to_delete", title: "Delete Me")
 
           assert_difference("BeautifulPhotons::Gallery.count", -1) do
-            delete api_v1_gallery_url(gallery)
+            delete api_v1_gallery_url(gallery), headers: auth_headers
           end
 
           assert_response :no_content
         end
 
         test "POST /api/v1/galleries returns 422 without title" do
-          post api_v1_galleries_url, params: { gallery: { description: "No title" } }
+          post api_v1_galleries_url, params: { gallery: { description: "No title" } },
+            headers: auth_headers
 
           assert_response :unprocessable_entity
 
@@ -73,13 +74,19 @@ module BeautifulPhotons
         test "GET /api/v1/galleries returns list of galleries" do
           Gallery.create!(name: "homepage", title: "Homepage")
 
-          get api_v1_galleries_url
+          get api_v1_galleries_url, headers: auth_headers
 
           assert_response :ok
 
           json = JSON.parse(response.body)
           assert_equal 1, json.length
           assert_equal "homepage", json.first["name"]
+        end
+
+        private
+
+        def auth_headers
+          { "Authorization" => "token test-api-token" }
         end
       end
     end

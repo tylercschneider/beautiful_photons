@@ -7,4 +7,9 @@ class ApplicationController < ActionController::Base
   def authenticate_user!
     # No-op for dummy app tests
   end
+
+  def authenticate_api_user!
+    token = request.headers["Authorization"]&.delete_prefix("token ")
+    head :unauthorized unless token == "test-api-token"
+  end
 end
