@@ -16,7 +16,7 @@ module BeautifulPhotons
           assert_difference("BeautifulPhotons::GalleryPhoto.count", 1) do
             post api_v1_gallery_photos_url(@gallery), params: {
               gallery_photo: { photo_id: @photo.id, position: 1, category: "backsplashes" }
-            }
+            }, headers: auth_headers
           end
 
           assert_response :created
@@ -32,7 +32,7 @@ module BeautifulPhotons
 
           patch api_v1_gallery_photo_url(@gallery, gp), params: {
             gallery_photo: { position: 3, category: "bathrooms" }
-          }
+          }, headers: auth_headers
 
           assert_response :ok
 
@@ -46,7 +46,7 @@ module BeautifulPhotons
           GalleryPhoto.create!(gallery: @gallery, photo: photo2, position: 1)
           GalleryPhoto.create!(gallery: @gallery, photo: @photo, position: 2)
 
-          get api_v1_gallery_photos_url(@gallery)
+          get api_v1_gallery_photos_url(@gallery), headers: auth_headers
 
           assert_response :ok
 
@@ -60,13 +60,17 @@ module BeautifulPhotons
           gp = GalleryPhoto.create!(gallery: @gallery, photo: @photo, position: 1)
 
           assert_difference("BeautifulPhotons::GalleryPhoto.count", -1) do
-            delete api_v1_gallery_photo_url(@gallery, gp)
+            delete api_v1_gallery_photo_url(@gallery, gp), headers: auth_headers
           end
 
           assert_response :no_content
         end
 
         private
+
+        def auth_headers
+          { "Authorization" => "token test-api-token" }
+        end
 
         def create_photo(title: "Test Photo")
           photo = BeautifulPhotons::Photo.new(title: title)

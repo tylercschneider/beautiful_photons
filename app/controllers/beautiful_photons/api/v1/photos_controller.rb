@@ -1,9 +1,7 @@
 module BeautifulPhotons
   module Api
     module V1
-      class PhotosController < ApplicationController
-        skip_forgery_protection
-
+      class PhotosController < Api::BaseController
         def index
           photos = Photo.all
           render json: photos.map { |photo| photo_json(photo) }

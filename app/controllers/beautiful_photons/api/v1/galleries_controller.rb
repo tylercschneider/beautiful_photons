@@ -1,9 +1,7 @@
 module BeautifulPhotons
   module Api
     module V1
-      class GalleriesController < ApplicationController
-        skip_forgery_protection
-
+      class GalleriesController < Api::BaseController
         def index
           galleries = Gallery.all
           render json: galleries.map { |gallery| gallery_json(gallery) }

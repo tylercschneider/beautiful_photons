@@ -1,9 +1,7 @@
 module BeautifulPhotons
   module Api
     module V1
-      class GalleryPhotosController < ApplicationController
-        skip_forgery_protection
-
+      class GalleryPhotosController < Api::BaseController
         def index
           gallery = Gallery.find(params[:gallery_id])
           gallery_photos = gallery.gallery_photos.order(:position)

@@ -4,12 +4,14 @@ require "beautiful_photons/engine"
 
 module BeautifulPhotons
   class Configuration
-    attr_accessor :admin_layout, :authentication_method, :current_user_method
+    attr_accessor :admin_layout, :authentication_method, :current_user_method,
+      :api_authentication_method
 
     def initialize
       @admin_layout = "application"
       @authentication_method = :authenticate_user!
       @current_user_method = :current_user
+      @api_authentication_method = :authenticate_api_user!
     end
   end
 
