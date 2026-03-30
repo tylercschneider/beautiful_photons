@@ -1,10 +1,11 @@
-<%= ui_form_page(title: "Desktop Crop (#{@standalone.aspect})", back_url: beautiful_photons.standalone_path(@standalone)) %>
+<% desktop_aspect = @standalone.aspect.presence || "4:3" %>
+<%= ui_form_page(title: "Desktop Crop (#{desktop_aspect})", back_url: beautiful_photons.standalone_path(@standalone)) %>
 
 <%= ui_page(max_width: :lg) do %>
   <%= ui_form(action: beautiful_photons.standalone_path(@standalone), method: :patch) do %>
     <input type="hidden" name="standalone[photo_id]" value="<%= @standalone.photo_id %>">
 
-    <div data-controller="crop-editor" data-crop-editor-aspect-value="<%= @standalone.aspect %>">
+    <div data-controller="crop-editor" data-crop-editor-aspect-value="<%= desktop_aspect %>">
       <div style="position: relative; overflow: hidden; user-select: none; border-radius: 4px;">
         <%= image_tag main_app.url_for(@standalone.photo.image), alt: @standalone.photo.title,
           style: "width: 100%; display: block;",

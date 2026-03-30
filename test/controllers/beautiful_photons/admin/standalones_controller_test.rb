@@ -68,6 +68,16 @@ module BeautifulPhotons
         assert_select "input[type='range']"
       end
 
+      test "GET /standalones/:id shows crop section without aspect ratio" do
+        photo = create_photo(title: "No Aspect Photo")
+        standalone = BeautifulPhotons::Standalone.create!(key: "hero_no_aspect", photo: photo)
+
+        get standalone_url(standalone)
+
+        assert_response :ok
+        assert_select "a[href='#{edit_crop_standalone_path(standalone)}']", text: "Edit"
+      end
+
       test "PATCH /standalones/:id saves crop data" do
         standalone = BeautifulPhotons::Standalone.create!(key: "hero")
         photo = create_photo
