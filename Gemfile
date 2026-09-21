@@ -11,7 +11,7 @@ gem "propshaft"
 
 gem "keystone_ui", github: "tylercschneider/keystone_ui"
 
-gem "tailwindcss-rails", "~> 4.0"
+gem "tailwindcss-rails", "~> 4.6"
 
 # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
 gem "rubocop-rails-omakase", require: false
